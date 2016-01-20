@@ -1,0 +1,46 @@
+<resin xmlns="http://caucho.com/ns/resin" xmlns:resin="http://caucho.com/ns/resin/core">
+  <log name="" level="info" path="stdout:"/>
+  <cluster id="">
+    <server id="" port="6801">
+        <http port="8080"/> 
+        <jvm-arg>-Xmn128m</jvm-arg>
+        <jvm-arg>-Xmx512m</jvm-arg>
+        <jvm-arg>-Xss256k</jvm-arg>
+    		<jvm-arg>-Xdebug</jvm-arg>
+    		<jvm-arg>-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=12351</jvm-arg>
+    		<jvm-arg>-Djava.net.preferIPv4Stack=true</jvm-arg>
+      <watchdog-jvm-arg>-Dcom.sun.management.jmxremote</watchdog-jvm-arg>
+      <watchdog-port>6601</watchdog-port>
+    </server>
+    <resin:import path="${resin.home}/conf/app-default.xml"/>
+    <host id="" root-directory=".">
+        <access-log path-format="logs/access.log.%Y%m%d_%H" rollover-period="1h"
+                 format='%h %{X-Real-IP}i %l %u %t "%r" %s %b %D "%{Referer}i" "%{User-Agent}i"'/>
+
+        <database jndi-name="jdbc/qiumi">
+            <driver 
+                user="root" password="viper2014"
+                url="jdbc:mysql://182.254.170.210:3306/jmaox?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
+                type="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource"/>
+        </database>		
+
+        <env-entry>
+            <description>MemCahcedClient config for Qiumi</description>
+            <env-entry-name>memCachedClientConfig4Qiumi</env-entry-name>
+            <env-entry-type>java.lang.String</env-entry-type>
+            <env-entry-value>
+                servers=127.0.0.1:11211
+                initConn=20
+                minConn=10
+                maxConn=50
+                maintSleep=30
+                nagle=false
+                socketTO=3000
+            </env-entry-value>
+        </env-entry>
+        
+   	<web-app id="/" document-directory="/Users/maozhijun/Desktop/Projects/MZJ/jmaox/target/jmaox-1.0/" />
+    </host>
+  </cluster>
+</resin>
+

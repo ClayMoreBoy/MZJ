@@ -160,15 +160,13 @@ public class UserController extends BaseController {
     @Before(UserInterceptor.class)
     public void uploadAvatar() throws Exception {
         UploadFile uploadFile = getFile("avatar", Constants.UPLOAD_DIR_AVATAR);
-        String path = Constants.getBaseUrl() + "/" + Constants.UPLOAD_DIR + "/" + Constants.UPLOAD_DIR_AVATAR + "/" + uploadFile.getFileName();
-        User user = (User) getSession().getAttribute(Constants.USER_SESSION);
-        user.set("avatar", path).update();
-        //裁剪图片
-        //如果服务器是tomcat,就不需要修改
-        //如果服务器是jetty,需要将下面static/upload/avatar/ 前加一个/,也就是修改成/static/upload/avatar
-        String realPath = getRequest().getRealPath("/") + "/static/upload/avatar/" + uploadFile.getFileName();
-        System.out.println(realPath);
-        ImageUtil.zoomImage(realPath, realPath, 100, 100);
+        if (uploadFile!=null){
+            String path = Constants.getBaseUrl() + "/" + Constants.UPLOAD_DIR + "/" + Constants.UPLOAD_DIR_AVATAR + "/" + uploadFile.getFileName();
+            User user = (User) getSession().getAttribute(Constants.USER_SESSION);
+            user.set("avatar", path).update();
+            String realPath = getRequest().getServletContext().getRealPath("/") + "/static/upload/avatar/" + uploadFile.getFileName();
+            ImageUtil.zoomImage(realPath, realPath, 100, 100);
+        }
         redirect(Constants.getBaseUrl() + "/user/setting");
     }
 }

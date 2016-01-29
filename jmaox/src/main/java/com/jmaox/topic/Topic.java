@@ -1,9 +1,7 @@
 package com.jmaox.topic;
 
-import com.jmaox.label.Label;
 import com.jmaox.section.Section;
 import com.jmaox.utils.DateUtil;
-import com.jmaox.utils.StrUtil;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;

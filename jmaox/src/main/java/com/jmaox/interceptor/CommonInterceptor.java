@@ -16,6 +16,7 @@ import java.util.Date;
  */
 public class CommonInterceptor implements Interceptor {
 
+    @Override
     public void intercept(Invocation ai) {
         // session cookie 互换
         String user_cookie = ai.getController().getCookie(Constants.USER_COOKIE);

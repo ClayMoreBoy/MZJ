@@ -16,6 +16,7 @@ import com.jmaox.valicode.ValiCode;
 import cn.weibo.Users;
 import cn.weibo.model.WeiboException;
 import com.jfinal.kit.HashKit;
+import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.qq.connect.QQConnectException;
@@ -419,6 +420,7 @@ public class IndexController extends BaseController {
     }
 
     public void sendValiCode() {
+        Prop prop = PropKit.getProp("config.properties");
         String email = getPara("email");
         if (StrUtil.isBlank(email)) {
             error("邮箱不能为空");
@@ -440,7 +442,7 @@ public class IndexController extends BaseController {
                             .set("expire_time", DateUtil.getMinuteAfter(new Date(), 30))
                             .set("target", email)
                             .save();
-                    EmailSender.sendMail("JMaoX社区－找回密码验证码", new String[]{email}, "您找回密码的验证码是：" + valicode + "\r\n" + "该验证码只能使用一次，并且有效期仅30分钟。");
+                    EmailSender.sendMail(prop.get("email.sender") + "－找回密码验证码", new String[]{email}, "您找回密码的验证码是：" + valicode + "\r\n" + "该验证码只能使用一次，并且有效期仅30分钟。");
                     success();
                 }
             } else if (type.equalsIgnoreCase(Constants.ValiCodeType.REG)) {
@@ -456,7 +458,7 @@ public class IndexController extends BaseController {
                             .set("expire_time", DateUtil.getMinuteAfter(new Date(), 30))
                             .set("target", email)
                             .save();
-                    EmailSender.sendMail("JMaoX社区－注册账户验证码", new String[]{email}, "您注册账户的验证码是：" + valicode + "\r\n" + "该验证码只能使用一次，并且有效期仅30分钟。");
+                    EmailSender.sendMail(prop.get("email.sender") + "－注册账户验证码", new String[]{email}, "您注册账户的验证码是：" + valicode + "\r\n" + "该验证码只能使用一次，并且有效期仅30分钟。");
                     success();
                 }
             }

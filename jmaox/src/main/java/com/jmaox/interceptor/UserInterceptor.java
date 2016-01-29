@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
  * Created by liuyang on 15/4/2.
  */
 public class UserInterceptor implements Interceptor {
+    @Override
     public void intercept(Invocation ai) {
         HttpServletRequest request = ai.getController().getRequest();
         HttpSession session = request.getSession();

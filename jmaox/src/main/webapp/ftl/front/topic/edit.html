@@ -1,8 +1,12 @@
 <#include "/ftl/front/common/_layout.html"/>
-<@html title="编辑话题 - ${siteTitle!}" description="编辑话题" sidebar_create_info="show" page_tab="topic" sidebar_md_help="show">
+<@html title="编辑话题 - ${siteTitle!}" description="编辑话题" sidebar_create_info="show" page_tab="topic" sidebar_md_help="hidden">
 <link rel="stylesheet" href="${baseUrl!}/static/bootstrap/css/jquery-ui.css"/>
-<script src="${baseUrl!}/static/js/marked.min.js"></script>
 <script src="${baseUrl!}/static/bootstrap/js/jquery-ui.js"></script>
+<script type="text/javascript" charset="utf-8" src="${baseUrl!}/ueditor-1_4_3_1/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${baseUrl!}/ueditor-1_4_3_1/ueditor.all.min.js"></script>
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" src="${baseUrl!}/ueditor-1_4_3_1/lang/zh-cn/zh-cn.js"></script>
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -16,12 +20,12 @@
             <input type="hidden" name="tid" value="${topic.id!}"/>
             <select name="sid" id="sid" class="form-control" style="width: 20%; margin-bottom: 5px;">
                 <#list sections as section>
-                    <option <#if topic.tab == '${section.tab!}'> selected </#if> value="${section.id!}">${section.name!}</option>
+                <option <#if topic.tab == '${section.tab!}'> selected </#if> value="${section.id!}">${section.name!}</option>
                 </#list>
             </select>
             <div id="labels">
                 <#list labels as label>
-                    <span class="label label-info label-item" name="${label.name!}">${label.name!}<a href="javascript:;" onclick="$(this).parents('.label').remove();">&nbsp;x</a></span>
+                <span class="label label-info label-item" name="${label.name!}">${label.name!}<a href="javascript:;" onclick="$(this).parents('.label').remove();">&nbsp;x</a></span>
                 </#list>
             </div>
             <input type="hidden" name="label" value=""/>
@@ -29,14 +33,21 @@
             <input type="button" class="btn btn-success btn-sm" onclick="addLabel()" value="添加">
             <input type="text" placeholder="标题字数10字以上" id="title" name="title" value="${topic.title!}" class="form-control" style="margin-bottom: 5px;"/>
             <input type="text" placeholder="原文地址（原创可不写）" id="original_url" name="original_url" value="${topic.original_url!}" class="form-control" style="margin-bottom: 5px;"/>
-            <div style="margin-bottom: 5px;"><textarea id="content" name="content" class="form-control" style="height: 400px;">${topic.content!}</textarea></div>
+            <div style="margin-bottom: 5px;">
+                <script id="editor" type="text/plain" style="width:100%;height:400px;"></script>
+                <textarea id="content" name="content" class="hidden form-control" style="height: 400px;">${topic.content!}</textarea>
+            </div>
             <input type="button" onclick="submitForm()" value="提  交" class="btn btn-primary btn-sm">
-            <input type="button" onclick="preview()" value="预  览" class="btn btn-primary btn-sm pull-right">
+            <!--<input type="button" onclick="preview()" value="预  览" class="btn btn-primary btn-sm pull-right">-->
         </form>
         <div id="preview_content" class="hidden"></div>
     </div>
 </div>
 <script type="text/javascript">
+    var ue = UE.getEditor('editor');
+    $(document).ready(function() {
+        setTimeout('ue.setContent($("#content").val())',1000);
+    });
     function submitForm() {
         //将标签格式化放入隐藏表单里
         var labelName = '';
@@ -44,58 +55,54 @@
             labelName += $(this).attr("name") + ",";
         });
         $("input[name='label']").val(labelName);
-        if($.trim($("#title").val()) == "") {
+        if ($.trim($("#title").val()) === "") {
             alert("标题不能为空");
             $("#title").focus();
-        } else if($.trim($("#content").val()) == "") {
+        } else if (ue.getContent() === "") {
             alert("内容不能为空");
         } else {
+            $("#content").val(ue.getContent());
             $("#create_form").submit();
         }
     }
 
-    function preview() {
-        var content = $("#content").val();
-        $("#preview_content").html(marked(content)).removeClass("hidden").addClass("pre_backgroud_color");
-    }
-
     $(function () {
-        $( "#label" ).autocomplete({
-            source: function( request, response ) {
+        $("#label").autocomplete({
+            source: function (request, response) {
                 $.ajax({
                     url: "${baseUrl!}/label/search",
                     dataType: "json",
                     data: {
                         q: request.term
                     },
-                    success: function( data ) {
-                        response( data );
+                    success: function (data) {
+                        response(data);
                     }
                 });
             },
             minLength: 2,
-            select: function( event, ui ) {
-                if($("#labels span").size() >= 5) {
+            select: function (event, ui) {
+                if ($("#labels span").size() >= 5) {
                     alert("每个话题最多添加5个标签");
                 } else {
                     appendLabel(ui.item.label);
                 }
                 $("#label").val("");
             },
-            open: function() {
-                $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+            open: function () {
+                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
             },
-            close: function() {
-                $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+            close: function () {
+                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
             }
         });
     });
 
     function addLabel() {
-        if($("#labels span").size() >= 5) {
+        if ($("#labels span").size() >= 5) {
             alert("每个话题最多添加5个标签");
         } else {
-            if($.trim($("#label").val()).length > 0) {
+            if ($.trim($("#label").val()).length > 0) {
                 appendLabel($('#label').val());
             }
         }
@@ -104,7 +111,7 @@
     }
 
     function appendLabel(labelName) {
-        $("#labels").append('<span class="label label-info label-item" name="'+labelName+'">'+labelName+'<a href="javascript:;" onclick="$(this).parents(\'.label\').remove();">&nbsp;x</a></span>');
+        $("#labels").append('<span class="label label-info label-item" name="' + labelName + '">' + labelName + '<a href="javascript:;" onclick="$(this).parents(\'.label\').remove();">&nbsp;x</a></span>');
     }
 </script>
 </@html>

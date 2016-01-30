@@ -164,7 +164,7 @@ public class UserController extends BaseController {
             String path = Constants.getBaseUrl() + "/" + Constants.UPLOAD_DIR + "/" + Constants.UPLOAD_DIR_AVATAR + "/" + uploadFile.getFileName();
             User user = (User) getSession().getAttribute(Constants.USER_SESSION);
             user.set("avatar", path).update();
-            String realPath = getRequest().getServletContext().getRealPath("/") + "/static/upload/avatar/" + uploadFile.getFileName();
+            String realPath = getRequest().getRealPath("/") + "/static/upload/avatar/" + uploadFile.getFileName();
             ImageUtil.zoomImage(realPath, realPath, 100, 100);
         }
         redirect(Constants.getBaseUrl() + "/user/setting");

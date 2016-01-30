@@ -1,11 +1,10 @@
 <#include "/ftl/mobile/common/_layout.html"/>
 <@html title="${topic.title!} - ${siteTitle!}" description="${topic.title!}">
-<link rel="stylesheet" href="${baseUrl!}/static/css/highlight.css">
-<link rel="stylesheet" href="${baseUrl!}/static/css/jquery.atwho.min.css">
-<script src="${baseUrl!}/static/js/marked.min.js"></script>
-<script src="${baseUrl!}/static/js/highlight.min.js"></script>
-<script src="${baseUrl!}/static/js/lodash.min.js"></script>
-<script src="${baseUrl!}/static/js/jquery.atwho.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${baseUrl!}/ueditor-1_4_3_1/ueditor.config.reply.js"></script>
+<script type="text/javascript" charset="utf-8" src="${baseUrl!}/ueditor-1_4_3_1/ueditor.all.min.js"> </script>
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" src="${baseUrl!}/ueditor-1_4_3_1/lang/zh-cn/zh-cn.js"></script>
 
 <div class="panel panel-default">
     <div class="panel-body <#if topic.good == 1>np-label-digest</#if>">
@@ -29,8 +28,9 @@
         </div>
     </div>
     <div class="panel-body sep">
-        <div id="topic_content" class="hidden word-wrap">
-            <textarea id="topicContent">${topic.content!}</textarea>
+        <div id="topic_content" class="word-wrap">
+            ${topic.content!}
+            <!--<textarea id="topicContent">${topic.content!}</textarea>-->
         </div>
         <div>
             <#list labels as label>
@@ -100,8 +100,9 @@
                     </div>
                 </#if>
                 <div>
-                    <div id="reply_content_${reply_index}" class="hidden reply_content word-wrap">
-                        <textarea name="_reply_content">${reply.content!}</textarea>
+                    <div id="reply_content_${reply_index}" class="reply_content word-wrap">
+                        ${reply.content!}
+                        <!--<textarea name="_reply_content">${reply.content!}</textarea>-->
                     </div>
                 </div>
             </div>
@@ -113,30 +114,25 @@
         <div class="panel-body sep" style="padding-top:3px;">添加回复</div>
         <div class="panel-body sep">
             <form action="${baseUrl!}/reply/${topic.id!}" method="post" id="reply_form">
-                <div id="reply_content"><textarea id="content" name="content" class="form-control" style="height: 70px;"></textarea></div>
+                <div id="reply_content">
+                    <script id="editor" type="text/plain" style="width:100%;height:70px;"></script>
+                    <textarea id="content" name="content" class="hidden form-control" style="height: 70px;"></textarea>
+                </div>
                 <input type="submit" class="btn btn-default btn-xs" value="回复" style="margin: 3px 0 0 0;">
             </form>
         </div>
     </div>
 </#if>
 <script>
-    //格式化话题内容的markdown
-    $("#topic_content").html(marked($("#topicContent").val())).removeClass("hidden");
-
-    //格式化回复的markdown
-    var _reply_content = $("textarea[name='_reply_content']");
-    $.each(_reply_content, function (index, data) {
-        $("#reply_content_" + index).html(marked($(data).val())).removeClass("hidden");
-    });
-
-    hljs.initHighlightingOnLoad();
+    var ue = UE.getEditor('editor');
 
     $(function () {
         $("#reply_form").submit(function () {
-            if ($.trim($("#content").val()) == "") {
+            if (ue.getContent() === "") {
                 alert("内容不能为空");
                 return false;
             }
+            $("#content").val(ue.getContent());
             return true;
         });
     });
@@ -144,8 +140,8 @@
     var _type = 0;
     function collect(type, tid) {
         var url = "${baseUrl!}/collect/" + tid;
-        if (_type == 0) _type = type;
-        if (_type == 2) url = "${baseUrl!}/collect/delete/" + tid;
+        if (_type === 0) _type = type;
+        if (_type === 2) url = "${baseUrl!}/collect/delete/" + tid;
         $.ajax({
             url: url,
             async: false,
@@ -154,8 +150,8 @@
             dataType: "json",
             data: {},
             success: function (data) {
-                if (data.code == '200') {
-                    if (_type == 1) {
+                if (data.code === '200') {
+                    if (_type === 1) {
                         _type = 2;
                         $("#collect").removeClass("btn-success");
                         $("#collect").addClass("btn-default");
@@ -186,7 +182,7 @@
                     tid: tid
                 },
                 success: function (data) {
-                    if (data.code == '200') {
+                    if (data.code === '200') {
                         $("span[id^='bestReply_']").each(function (i, item) {
                             $(item).html("");
                         });
@@ -198,16 +194,5 @@
             });
         }
     }
-
-    var nicknames = [];
-    nicknames[0] = {author_id:'${topic.author_id!}', name: '${topic.nickname!}'};
-    $("a[data_class='atwho']").each(function (i, item) {
-        nicknames[i + 1] = {author_id:$(item).attr('data_id') ,name:$(item).text()};
-    });
-
-    $('#content').atwho({
-        at: '@',
-        data: _.uniq(nicknames, 'author_id')
-    });
 </script>
 </@html>

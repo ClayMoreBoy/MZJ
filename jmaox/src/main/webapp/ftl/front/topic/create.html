@@ -1,8 +1,13 @@
 <#include "/ftl/front/common/_layout.html"/>
-<@html title="发布话题 - ${siteTitle!}" description="发布话题" sidebar_create_info="show" page_tab="topic" sidebar_md_help="show">
+<@html title="发布话题 - ${siteTitle!}" description="发布话题" sidebar_create_info="show" page_tab="topic" sidebar_md_help="hidden">
 <link rel="stylesheet" href="${baseUrl!}/static/bootstrap/css/jquery-ui.css"/>
 <script src="${baseUrl!}/static/js/marked.min.js"></script>
 <script src="${baseUrl!}/static/bootstrap/js/jquery-ui.js"></script>
+<script type="text/javascript" charset="utf-8" src="${baseUrl!}/ueditor-1_4_3_1/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${baseUrl!}/ueditor-1_4_3_1/ueditor.all.min.js"> </script>
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" src="${baseUrl!}/ueditor-1_4_3_1/lang/zh-cn/zh-cn.js"></script>
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -27,16 +32,19 @@
             <input type="text" placeholder="原文地址（原创可不写）" id="original_url" name="original_url" class="form-control"
                    style="margin-bottom: 5px;"/>
             <div style="margin-bottom: 5px;">
-                <textarea id="content" name="content" class="form-control" style="height: 400px;"></textarea>
+                <script id="editor" type="text/plain" style="width:100%;height:400px;"></script>
+                <textarea id="content" name="content" class="hidden form-control" style="height: 400px;"></textarea>
             </div>
             <input type="button" onclick="submitForm()" value="提  交" class="btn btn-primary btn-sm">
-            <input type="button" onclick="preview()" value="预  览" class="btn btn-primary btn-sm pull-right">
+            <!--<input type="button" onclick="preview()" value="预  览" class="btn btn-primary btn-sm pull-right">-->
 
             <div id="preview_content" class="hidden"></div>
         </form>
     </div>
 </div>
 <script type="text/javascript">
+    
+    var ue = UE.getEditor('editor');
     function submitForm() {
         //将标签格式化放入隐藏表单里
         var labelName = '';
@@ -44,12 +52,13 @@
             labelName += $(this).attr("name") + ",";
         });
         $("input[name='label']").val(labelName);
-        if ($.trim($("#title").val()) == "") {
+        if ($.trim($("#title").val()) === "") {
             alert("标题不能为空");
             $("#title").focus();
-        } else if ($.trim($("#content").val()) == "") {
+        } else if (ue.getContent() === "") {
             alert("内容不能为空");
         } else {
+            $("#content").val(ue.getContent());
             $("#create_form").submit();
         }
     }

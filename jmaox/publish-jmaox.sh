@@ -11,6 +11,8 @@ else
         scp -r target/jmaox-1.0/ftl support@182.254.171.210:/data/web/jmaox-1.0/
     elif [ $1 == "static" ]; then
         scp -r target/jmaox-1.0/static support@182.254.171.210:/data/web/jmaox-1.0/
+    elif [ $1 == "ueditor" ]; then
+        scp -r target/jmaox-1.0/ueditor-1_4_3_1 support@182.254.171.210:/data/web/jmaox-1.0/
     elif [ $1 == "lib" ]; then
         scp -r target/jmaox-1.0/WEB-INF/lib/$2 support@182.254.171.210:/data/web/jmaox-1.0/WEB-INF/lib/
     elif [ $1 == "all" ]; then

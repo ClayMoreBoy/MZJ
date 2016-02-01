@@ -35,7 +35,7 @@ public class StrUtil extends StrKit {
     }
 
     public static String randomString(int length) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int loop = 0; loop < length; ++loop) {
             sb.append(hexDigits[rand.nextInt(hexDigits.length)]);
         }
@@ -43,7 +43,7 @@ public class StrUtil extends StrKit {
     }
 
     public static String randomNumber(int length) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int loop = 0; loop < length; ++loop) {
             sb.append(digits[rand.nextInt(digits.length)]);
         }
@@ -75,8 +75,8 @@ public class StrUtil extends StrKit {
     }
 
     public static List<String> findAt(String str) {
-        List<String> ats = new ArrayList<String>();
-        String pattern = "[@]{1}([a-zA-Z0-9_\u4E00-\u9FA5]{1,})[ $]";
+        List<String> ats = new ArrayList<>();
+        String pattern = "@([a-zA-Z0-9_\u4E00-\u9FA5]{1,})";
         Pattern regex = Pattern.compile(pattern);
         Matcher regexMatcher = regex.matcher(str);
         while (regexMatcher.find()) {
@@ -86,7 +86,7 @@ public class StrUtil extends StrKit {
     }
 
     public static void main(String[] args) {
-        System.out.println(findAt("[@朋也](http://jfbbs.tomoya.cn/user/1a973292fc004c29bfc0d95045c1c340)"));
+        System.out.println(findAt("@朋也&(http://jfbbs.tomoya.cn/user/1a973292fc004c29bfc0d95045c1c340)"));
     }
 
 }

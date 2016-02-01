@@ -12,9 +12,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li <#if page_tab == 'topic'> class="active" </#if>><a href="${baseUrl!}/?tab=news&q=${q!}">社区</a></li>
-                <li <#if page_tab == 'doc'> class="active" </#if>><a href="${baseUrl!}/doc">论坛</a></li>
-                <li <#if page_tab == 'api'> class="active" </#if>><a href="${baseUrl!}/api">博客</a></li>
+                <li <#if page_tab == 'topic'> class="active" </#if>><a href="${baseUrl!}/?tab=news&q=${q!}">推荐</a></li>
+                <li <#if page_tab == 'data'> class="active" </#if>><a href="http://bsr.hisoccer.cn/data.html">数据</a></li>
             </ul>
             <form class="navbar-form navbar-left" id="search_form" role="search" method="get" action="${baseUrl!}/">
                 <div class="form-group has-feedback">

@@ -33,7 +33,7 @@ public class TopicController extends BaseController {
             setAttr("replies", replies);
             //查询收藏信息
             User user = getSessionAttr(Constants.USER_SESSION);
-            if(user != null) {
+            if (user != null) {
                 Collect collect = Collect.me.findByTidAndAuthorId(id, user.getStr("id"));
                 setAttr("collect", collect);
             }
@@ -46,32 +46,41 @@ public class TopicController extends BaseController {
             //查询该话题下的回复是否有被采纳的
             Reply reply = Reply.me.findBestReplyByTid(id);
             setAttr("bestReply", reply == null ? 0 : 1);
-            if(!AgentUtil.getAgent(getRequest()).equals(AgentUtil.WEB)) render("mobile/topic/index.html");
-            else render("front/topic/index.html");
+            if (!AgentUtil.getAgent(getRequest()).equals(AgentUtil.WEB)) {
+                render("mobile/topic/index.html");
+            } else {
+                render("front/topic/index.html");
+            }
         } else {
             renderText("您查询的话题不存在");
         }
     }
 
     @Before(UserInterceptor.class)
-    public void create(){
-        if(!AgentUtil.getAgent(getRequest()).equals(AgentUtil.WEB)) render("mobile/topic/create.html");
-        else render("front/topic/create.html");
+    public void create() {
+        if (!AgentUtil.getAgent(getRequest()).equals(AgentUtil.WEB)) {
+            render("mobile/topic/create.html");
+        } else {
+            render("front/topic/create.html");
+        }
     }
 
     @Before(UserInterceptor.class)
-    public void edit(){
+    public void edit() {
         String tid = getPara(0);
         Topic topic = Topic.me.findWithSection(tid);
-        if(topic == null) {
+        if (topic == null) {
             renderText(Constants.OP_ERROR_MESSAGE);
         } else {
             setAttr("topic", topic);
             //查询标签
             List<Label> labels = Label.me.findByTid(tid);
             setAttr("labels", labels);
-            if(!AgentUtil.getAgent(getRequest()).equals(AgentUtil.WEB)) render("mobile/topic/edit.html");
-            else render("front/topic/edit.html");
+            if (!AgentUtil.getAgent(getRequest()).equals(AgentUtil.WEB)) {
+                render("mobile/topic/edit.html");
+            } else {
+                render("front/topic/edit.html");
+            }
         }
     }
 
@@ -79,7 +88,7 @@ public class TopicController extends BaseController {
     public void update() {
         String tid = getPara("tid");
         Topic topic = Topic.me.findById(tid);
-        if(topic == null) {
+        if (topic == null) {
             renderText(Constants.OP_ERROR_MESSAGE);
         } else {
             String sid = getPara("sid");
@@ -99,12 +108,12 @@ public class TopicController extends BaseController {
             //删除label_topic_id里所有该话题的标签关联数据
             LabelTopicId.me.deleteByTid(tid);
             //处理标签
-            if(!StrUtil.isBlank(label)) {
+            if (!StrUtil.isBlank(label)) {
                 label = StrUtil.transHtml(label);
                 String[] labels = label.split(",");
-                for(String l : labels) {
+                for (String l : labels) {
                     Label label1 = Label.me.findByName(l);
-                    if(label1 == null) {
+                    if (label1 == null) {
                         label1 = new Label();
                         label1.set("name", l)
                                 .set("in_time", date)
@@ -123,7 +132,7 @@ public class TopicController extends BaseController {
         String tid = getPara(0);
         Topic topic = Topic.me.findById(tid);
         User user = getSessionAttr(Constants.USER_SESSION);
-        if(topic == null || !topic.get("author_id").equals(user.get("id"))) {
+        if (topic == null || !topic.get("author_id").equals(user.get("id"))) {
             renderText(Constants.OP_ERROR_MESSAGE);
         } else {
             //删除关联的标签
@@ -164,12 +173,12 @@ public class TopicController extends BaseController {
                 .set("show_status", 1)
                 .save();
         //处理标签
-        if(!StrUtil.isBlank(label)) {
+        if (!StrUtil.isBlank(label)) {
             label = StrUtil.transHtml(label);
             String[] labels = label.split(",");
-            for(String l : labels) {
+            for (String l : labels) {
                 Label label1 = Label.me.findByName(l);
-                if(label1 == null) {
+                if (label1 == null) {
                     label1 = new Label();
                     label1.set("name", l)
                             .set("in_time", date)

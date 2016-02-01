@@ -77,17 +77,16 @@ public class ImageUtil {
      * 图片缩放
      */
     public static void zoomImage(String src, String dest, int w, int h) throws Exception {
-        double wr = 0, hr = 0;
+        double wr, hr;
         File srcFile = new File(src);
         File destFile = new File(dest);
         BufferedImage bufImg = ImageIO.read(srcFile);
-        Image Itemp = bufImg.getScaledInstance(w, h, bufImg.SCALE_SMOOTH);
         wr = w * 1.0 / bufImg.getWidth();
         hr = h * 1.0 / bufImg.getHeight();
         AffineTransformOp ato = new AffineTransformOp(AffineTransform.getScaleInstance(wr, hr), null);
-        Itemp = ato.filter(bufImg, null);
+        Image ti = ato.filter(bufImg, null);
         try {
-            ImageIO.write((BufferedImage) Itemp, dest.substring(dest.lastIndexOf(".") + 1), destFile);
+            ImageIO.write((BufferedImage) ti, dest.substring(dest.lastIndexOf(".") + 1), destFile);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

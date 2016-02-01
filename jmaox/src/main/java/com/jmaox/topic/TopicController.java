@@ -94,6 +94,9 @@ public class TopicController extends BaseController {
             String sid = getPara("sid");
             String title = getPara("title");
             String content = getPara("content");
+            String intro = getPara("intro","");
+            String author = getPara("author","");
+            String banner = getPara("banner","");
             String original_url = getPara("original_url");
             String label = getPara("label");
             Date date = new Date();
@@ -104,6 +107,9 @@ public class TopicController extends BaseController {
                     .set("original_url", StrUtil.transHtml(original_url))
                     .set("modify_time", date)
                     .set("last_reply_time", date)
+                    .set("intro", intro)
+                    .set("author", author)
+                    .set("banner", banner)
                     .update();
             //删除label_topic_id里所有该话题的标签关联数据
             LabelTopicId.me.deleteByTid(tid);
@@ -153,6 +159,9 @@ public class TopicController extends BaseController {
         String sid = getPara("sid");
         String title = getPara("title");
         String content = getPara("content");
+        String intro = getPara("intro","");
+        String author = getPara("author","");
+        String banner = getPara("banner","");
         String original_url = getPara("original_url");
         String label = getPara("label");
         Date date = new Date();
@@ -171,6 +180,9 @@ public class TopicController extends BaseController {
                 .set("top", 0)
                 .set("good", 0)
                 .set("show_status", 1)
+                .set("intro", intro)
+                .set("author", author)
+                .set("banner", banner)
                 .save();
         //处理标签
         if (!StrUtil.isBlank(label)) {

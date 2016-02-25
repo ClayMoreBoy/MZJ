@@ -14,7 +14,7 @@ public class IndexClientController extends BaseController {
         String tab = getPara("tab");
         String q = getPara("q");
         if(tab == null) tab = "all";
-        Page<Topic> page = Topic.me.paginate(getParaToInt("page", 1),
+        Page<Topic> page = Topic.me.paginateOrderByCreate(getParaToInt("page", 1),
                 getParaToInt("size", PropKit.use("config.properties").getInt("page_size")), tab, q, 1, null);
         success(page);
     }

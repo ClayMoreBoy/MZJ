@@ -34,19 +34,19 @@ public class Topic extends Model<Topic> {
                     .append(" where 1 = 1 and l.id = ").append(l);
         }
         if(show_status != null) {
-            condition.append(" and t.show_status = " + show_status);
+            condition.append(" and t.show_status = ").append(show_status);
         }
         if(!StrKit.isBlank(tab) && tab.equals("all")) {
             tab = null;
         }
         if(!StrKit.isBlank(tab)) {
-            condition.append(" and s.tab = '" + tab + "'");
+            condition.append(" and s.tab = '").append(tab).append("'");
         }
         if(!StrKit.isBlank(q)) {
             String[] qs = q.split(" ");
             condition.append(" and (");
             for(int c = 0; c < qs.length; c++) {
-                condition.append("t.title like \"%" + qs[c] + "%\" or t.content like \"%" + qs[c] + "%\" ");
+                condition.append("t.title like \"%").append(qs[c]).append("%\" or t.content like \"%").append(qs[c]).append("%\" ");
                 if(c + 1 < qs.length) condition.append(" or ");
             }
             condition.append(" ) ");
@@ -57,7 +57,53 @@ public class Topic extends Model<Topic> {
             for(Section s: sections) {
                 sid += s.get("id") + ",";
             }
-            condition.append(" and t.s_id in ("+sid.substring(0, sid.length() - 1)+") ");
+            condition.append(" and t.s_id in (").append(sid.substring(0, sid.length() - 1)).append(") ");
+        }
+        return super.paginate(pageNumber, pageSize, select, condition + orderBy);
+    }
+    
+    // --------------- 前台查询方法 开始 --------------
+    public Page<Topic> paginateOrderByCreate(int pageNumber, int pageSize, String tab, String q, Integer show_status, Integer l) {
+        String select = "select s.tab, s.name as sectionName, t.*, " +
+                "(select u.avatar from user u where u.id = t.last_reply_author_id) as last_reply_author_avatar, " +
+                "(select count(r.id) from reply r where t.id = r.tid) as reply_count, " +
+                "(select u.avatar from user u where u.id = t.author_id) as avatar, " +
+                "(select u.nickname from user u where u.id = t.author_id) as nickname";
+        String orderBy = " order by t.top desc, t.in_time desc ";
+        StringBuffer condition = new StringBuffer();
+        if(l == null) {
+            condition.append("from topic t left join section s on t.s_id = s.id where 1 = 1 ");
+        } else {
+            condition.append("from topic t left join section s on t.s_id = s.id ")
+                    .append(" left join label_topic_id lti on t.id = lti.tid ")
+                    .append(" left join label l on l.id = lti.lid ")
+                    .append(" where 1 = 1 and l.id = ").append(l);
+        }
+        if(show_status != null) {
+            condition.append(" and t.show_status = ").append(show_status);
+        }
+        if(!StrKit.isBlank(tab) && tab.equals("all")) {
+            tab = null;
+        }
+        if(!StrKit.isBlank(tab)) {
+            condition.append(" and s.tab = '").append(tab).append("'");
+        }
+        if(!StrKit.isBlank(q)) {
+            String[] qs = q.split(" ");
+            condition.append(" and (");
+            for(int c = 0; c < qs.length; c++) {
+                condition.append("t.title like \"%").append(qs[c]).append("%\" or t.content like \"%").append(qs[c]).append("%\" ");
+                if(c + 1 < qs.length) condition.append(" or ");
+            }
+            condition.append(" ) ");
+        }
+        List<Section> sections = Section.me.findShow();
+        if(sections.size()>0) {
+            String sid = "";
+            for(Section s: sections) {
+                sid += s.get("id") + ",";
+            }
+            condition.append(" and t.s_id in (").append(sid.substring(0, sid.length() - 1)).append(") ");
         }
         return super.paginate(pageNumber, pageSize, select, condition + orderBy);
     }

@@ -1,0 +1,258 @@
+.ball.green {
+    background: #1fc26b;
+}
+
+.ball.red {
+    background: #f8223c;
+}
+
+.ball.blue {
+    background: #0093e8;
+}
+
+.ball.gray {
+    background: #808080;
+}
+
+.num-list {
+    margin: -1em;
+    text-shadow: none;
+}
+
+.num-list ol, .num-list ul, .num-list li {
+    list-style: none;
+}
+
+.num-list ul {
+    margin: 0;
+    padding: 0;
+    height: 4.2em;
+    width: 100%;
+    border-bottom: 1px solid #e6e6e6;
+    box-sizing: border-box;
+}
+
+.num-list ul.first {
+    background: #fcefa1;
+}
+
+.num-list ul.head {
+    height: 2.5em;
+    line-height: 1.2em;
+}
+
+.num-list ul.head .first {
+    width: 20%;
+    margin-right: 0.3em;
+    padding-right: 0.3em;
+    border-right: 1px solid #e6e6e6;
+}
+
+.num-list ul.head .second {
+    width: 60%;
+}
+
+.num-list ul.head .third {
+    width: 15%;
+    margin-left: 0.3em;
+    padding-left: 0.3em;
+    border-left: 1px solid #e6e6e6;
+}
+
+.num-list li {
+    padding-top: 0.3em;
+    box-sizing: border-box;
+    height: 100%;
+    text-align: center;
+    float: left;
+    line-height: 1.6em;
+    font-size: 1.2em;
+    width: 10%;
+}
+
+.num-list li .ball {
+    line-height: 1.6em;
+    height: 1.6em;
+    width: 1.6em;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+}
+
+.num-list li .zodiacs {
+    line-height: 1.6em;
+    height: 1.6em;
+    display: block;
+}
+
+.num-list li .odd {
+    line-height: 1.6em;
+    height: 1.6em;
+    font-size: 0.5em;
+    color: #ff9075;
+    display: block;
+}
+
+.num-list li.issue {
+    line-height: 3em;
+    width: 20%;
+    border-right: 1px solid #e6e6e6;
+    margin-right: 0.3em;
+    padding-right: 0.3em;
+    color: #808080;
+}
+
+.num-list li.ping {
+    width: 60%;
+    line-height: 3em;
+}
+
+.num-list li.head {
+    line-height: 3em;
+    color: #808080;
+}
+
+.num-list li.te {
+    border-left: 1px solid #e6e6e6;
+    margin-left: 0.3em;
+    padding-left: 0.3em;
+    width: 15%;
+}
+
+.tz-num-list {
+    margin: -1em;
+    padding-bottom: 1em;
+    text-shadow: none;
+}
+
+.tz-num-list ol, .tz-num-list ul, .tz-num-list li {
+    list-style: none;
+}
+
+.tz-num-list ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.zodiac ul {
+    height: 3.5em;
+}
+
+.tz-num-list li {
+    padding-top: 0.3em;
+    box-sizing: border-box;
+    height: 100%;
+    text-align: center;
+    float: left;
+    line-height: 1.6em;
+    font-size: 1.2em;
+    width: 10%;
+}
+
+.tz-num-list li .ball {
+    line-height: 1.6em;
+    height: 1.6em;
+    width: 1.6em;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+}
+
+.tz-num-list li .zodiacs {
+    line-height: 1.6em;
+    height: 1.6em;
+    display: block;
+}
+
+.tz-num-list li .odd {
+    line-height: 1.6em;
+    height: 1.6em;
+    font-size: 0.5em;
+    color: #ff9075;
+    display: block;
+}
+
+.tz-num-list li.issue {
+    line-height: 3em;
+    width: 20%;
+    border-right: 1px solid #e6e6e6;
+    margin-right: 0.3em;
+    padding-right: 0.3em;
+    color: #808080;
+}
+
+.tz-num-list li.ping {
+    width: 60%;
+    line-height: 3em;
+}
+
+.tz-num-list li.head {
+    line-height: 3em;
+    color: #808080;
+}
+
+.tz-num-list li.te {
+    border-left: 1px solid #e6e6e6;
+    margin-left: 0.3em;
+    padding-left: 0.3em;
+    width: 15%;
+}
+
+.tz-num-list ul.first {
+    border-top: 1px solid #e6e6e6;
+}
+
+.tz-num-list li {
+    width: 15%;
+}
+
+.tz-num-list li.issue {
+    line-height: 2.3em;
+}
+
+.tz-num-list li .ball {
+    opacity: .1;
+}
+
+.tz-num-list li .ball.selective {
+    opacity: 1;
+}
+
+.tz-num-list.cart {
+    margin: 0;
+}
+
+.tz-num-list .select {
+    padding: 0 .3125em;
+}
+
+.cart {
+    padding: 0 .3125em;
+}
+
+.cart ul {
+    border-bottom: 0;
+    display: inline-block;
+}
+
+.cart li {
+    padding-top: 0.2em;
+    width: 2em;
+}
+
+.odd {
+    color: #c85e0b;
+}
+
+.basket {
+    border: 1px solid #8D8D8D;
+}
+
+.ui-footer-fixed {
+    padding-bottom: 0;
+}

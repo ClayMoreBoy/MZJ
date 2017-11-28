@@ -52,22 +52,34 @@ class LottoController extends BaseController
         }
     }
 
+    private function getNumberAttr($year, $number)
+    {
+        $cal = new Calendar();
+        if ($year == date('Y')) {
+            $first_zodiac_index = $this->first_zodiac_index;
+        } else {
+            $first_zodiac = $cal->Cal($year)['zodiac'];
+            $first_zodiac_index = array_search($first_zodiac, $this->zodiacs);
+        }
+        $index = (60 + $first_zodiac_index - ($number - 1)) % 12;
+
+        $color = '';
+        if (in_array($number, $this->blue_ball)) {
+            $color = '蓝波';
+        } elseif (in_array($number, $this->red_ball)) {
+            $color = '红波';
+        } elseif (in_array($number, $this->green_ball)) {
+            $color = '绿波';
+        }
+        return ['color' => $color, 'zodiac' => $this->zodiacs[$index]];
+    }
+
     public function index()
     {
-//        dump($this->num_attr);
-//        $issue = Issue::query()->where('status', '1')->orderBy('date', 'desc')->first();
-//        if (!isset($issue)) {
-//            $issue = Issue::query()->where('status', '0')->orderBy('date', 'desc')->first();
-//        }
         $issues = Issue::query()
-//            ->where('status', '2')
-//            ->take(20)
             ->where('date', '<', date_create('+12 hour'))
             ->orderBy('id', 'desc')
-//            ->simplePaginate();
             ->paginate();
-//        dump(4/49 + 4/48 + 4/47 + 4/46 + 4/45 + 4/44 + 4/43);
-
         return view('mobiles.index', ['issues' => $issues, 'num_attr' => $this->num_attr]);
     }
 
@@ -106,7 +118,8 @@ class LottoController extends BaseController
             'num_attr' => $this->num_attr]);
     }
 
-    public function toolsTeNumber(Request $request)
+    //分析
+    public function toolsAnalyses(Request $request, $action)
     {
         $issue_count = $request->input('issue_count', 50);//期数
         $issues = Issue::query()
@@ -114,12 +127,84 @@ class LottoController extends BaseController
             ->take($issue_count)
             ->orderBy('date', 'desc')
             ->get();
-
-        $te_i = [];
-        foreach ($issues as $issue) {
-            $issue->num7;
+        $te_numbers = [];
+        $te_zodiacs = [];
+        $te_weishus = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $te_colors = ['红波' => 0, '蓝波' => 0, '绿波' => 0];
+        $ping_numbers = [];
+        $ping_zodiacs = [];
+        $ping_weishus = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $ping_colors = ['红波' => 0, '蓝波' => 0, '绿波' => 0];
+        for ($i = 1; $i <= 49; $i++) {
+            $te_numbers[($i < 10 ? '0' : '') . $i] = 0;
+            $ping_numbers[($i < 10 ? '0' : '') . $i] = 0;
         }
-        return view('mobiles.tools_trend', ['issue_count' => $issue_count]);
+        foreach ($this->zodiacs as $zodiac) {
+            $te_zodiacs[$zodiac] = 0;
+            $ping_zodiacs[$zodiac] = 0;
+        }
+        foreach ($issues as $issue) {
+            $num7Attr = $this->getNumberAttr(substr($issue->date, 0, 4), $issue->num7);
+            $te_numbers[$issue->num7] += 1;
+            $te_weishus[$issue->num7 % 10] += 1;
+            $te_zodiacs[$num7Attr['zodiac']] += 1;
+            $te_colors[$num7Attr['color']] += 1;
+
+            $num1Attr = $this->getNumberAttr(substr($issue->date, 0, 4), $issue->num1);
+            $ping_numbers[$issue->num1] += 1;
+            $ping_weishus[$issue->num1 % 10] += 1;
+            $ping_zodiacs[$num1Attr['zodiac']] += 1;
+            $ping_colors[$num1Attr['color']] += 1;
+
+            $num2Attr = $this->getNumberAttr(substr($issue->date, 0, 4), $issue->num2);
+            $ping_numbers[$issue->num2] += 1;
+            $ping_weishus[$issue->num2 % 10] += 1;
+            $ping_zodiacs[$num2Attr['zodiac']] += 1;
+            $ping_colors[$num2Attr['color']] += 1;
+
+            $num3Attr = $this->getNumberAttr(substr($issue->date, 0, 4), $issue->num3);
+            $ping_numbers[$issue->num3] += 1;
+            $ping_weishus[$issue->num3 % 10] += 1;
+            $ping_zodiacs[$num3Attr['zodiac']] += 1;
+            $ping_colors[$num3Attr['color']] += 1;
+
+            $num4Attr = $this->getNumberAttr(substr($issue->date, 0, 4), $issue->num4);
+            $ping_numbers[$issue->num4] += 1;
+            $ping_weishus[$issue->num4 % 10] += 1;
+            $ping_zodiacs[$num4Attr['zodiac']] += 1;
+            $ping_colors[$num4Attr['color']] += 1;
+
+            $num5Attr = $this->getNumberAttr(substr($issue->date, 0, 4), $issue->num5);
+            $ping_numbers[$issue->num5] += 1;
+            $ping_weishus[$issue->num5 % 10] += 1;
+            $ping_zodiacs[$num5Attr['zodiac']] += 1;
+            $ping_colors[$num5Attr['color']] += 1;
+
+            $num6Attr = $this->getNumberAttr(substr($issue->date, 0, 4), $issue->num6);
+            $ping_numbers[$issue->num6] += 1;
+            $ping_weishus[$issue->num6 % 10] += 1;
+            $ping_zodiacs[$num6Attr['zodiac']] += 1;
+            $ping_colors[$num6Attr['color']] += 1;
+        }
+        arsort($te_numbers);
+        arsort($te_weishus);
+        arsort($te_zodiacs);
+        arsort($te_colors);
+        arsort($ping_numbers);
+        arsort($ping_weishus);
+        arsort($ping_zodiacs);
+        arsort($ping_colors);
+        return view('mobiles.tools_trend', [
+            'issue_count' => $issue_count,
+            'action' => $action,
+            'te_numbers' => $te_numbers,
+            'te_weishus' => $te_weishus,
+            'te_zodiacs' => $te_zodiacs,
+            'te_colors' => $te_colors,
+            'ping_numbers' => $ping_numbers,
+            'ping_weishus' => $ping_weishus,
+            'ping_zodiacs' => $ping_zodiacs,
+            'ping_colors' => $ping_colors]);
     }
 
     public function columns()

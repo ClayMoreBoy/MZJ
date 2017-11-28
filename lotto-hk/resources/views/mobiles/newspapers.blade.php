@@ -27,13 +27,13 @@
                     <h2>{{ isset($ni->newspaperO->name)?$ni->newspaperO->name:'' }}</h2>
                     <ul data-role="listview" data-divider-theme="a">
                         <li>
-                            <a href="#page_{{ $ni->id }}_a">
+                            <a href="#page_{{ $ni->id }}_a" data-ajax="false">
                                 {{--<img src="{{ 'http://images.6hch.com/'.$ni->image_a }}" style="width: 45%;">--}}
                                 A面
                             </a>
                         </li>
                         <li>
-                            <a href="#page_{{ $ni->id }}_b">
+                            <a href="#page_{{ $ni->id }}_b" data-ajax="false">
                                 {{--<img src="{{ 'http://images.6hch.com/'.$ni->image_b }}" style="width: 45%;">--}}
                                 B面
                             </a>

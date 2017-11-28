@@ -21,16 +21,12 @@ Route::group(["namespace" => "Foreground"], function () {
 });
 
 Route::group(["namespace" => "Mobiles"], function () {
+    Route::get('/mobiles/auth/', 'AuthController@login');
+    Route::get('/mobiles/change-password/', 'AuthController@changePassword');
+
     Route::get('/mobiles/', 'LottoController@index');
     Route::get('/mobiles/tools', 'LottoController@tools');
-    Route::get('/mobiles/tools/te/number/', 'LottoController@toolsTeNumber');
-    Route::get('/mobiles/tools/te/zodiac/', 'LottoController@toolsTeZodiac');
-    Route::get('/mobiles/tools/te/weishu/', 'LottoController@toolsTeWeishu');
-    Route::get('/mobiles/tools/te/color/', 'LottoController@toolsTeColor');
-    Route::get('/mobiles/tools/ping/number/', 'LottoController@toolsPingNumber');
-    Route::get('/mobiles/tools/ping/zodiac/', 'LottoController@toolsPingZodiac');
-    Route::get('/mobiles/tools/ping/weishu/', 'LottoController@toolsPingWeishu');
-    Route::get('/mobiles/tools/ping/color/', 'LottoController@toolsPingColor');
+    Route::get('/mobiles/tools/analyses/{action}/', 'LottoController@toolsAnalyses');
 
     Route::get('/mobiles/columns/', 'LottoController@columns');
     Route::get('/mobiles/newspapers/', 'LottoController@newspapers');

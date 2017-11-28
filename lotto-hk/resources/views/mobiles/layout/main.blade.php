@@ -36,6 +36,8 @@
         }
     </style>
     @yield('css')
+    <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.js"></script>
 </head>
 <body>
 <div data-role="page" id="main">
@@ -121,8 +123,6 @@
 @yield('other_page')
 
 </body>
-<script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
-<script src="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.js"></script>
 <script>
 </script>
 @yield('js')

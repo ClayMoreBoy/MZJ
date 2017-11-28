@@ -25,15 +25,15 @@
     <div style="margin:-1em -.5em;">
         <ul data-role="listview" data-inset="true" data-divider-theme="a">
             <li data-role="list-divider">特码走势</li>
-            <li><a href="/mobiles/tools/te/number/">号码</a></li>
-            <li><a href="/mobiles/tools/te/zodiac/">生肖</a></li>
-            <li><a href="/mobiles/tools/te/weishu/">尾数</a></li>
-            <li><a href="/mobiles/tools/te/color/">波色</a></li>
+            <li><a href="/mobiles/tools/analyses/te-number/" data-ajax="false">号码</a></li>
+            <li><a href="/mobiles/tools/analyses/te-zodiac/" data-ajax="false">生肖</a></li>
+            <li><a href="/mobiles/tools/analyses/te-weishu/" data-ajax="false">尾数</a></li>
+            <li><a href="/mobiles/tools/analyses/te-color/" data-ajax="false">波色</a></li>
             <li data-role="list-divider">平特走势</li>
-            <li><a href="/mobiles/tools/te/number/">号码</a></li>
-            <li><a href="/mobiles/tools/te/zodiac/">生肖</a></li>
-            <li><a href="/mobiles/tools/te/weishu/">尾数</a></li>
-            <li><a href="/mobiles/tools/te/color/">波色</a></li>
+            <li><a href="/mobiles/tools/analyses/ping-number/" data-ajax="false">号码</a></li>
+            <li><a href="/mobiles/tools/analyses/ping-zodiac/" data-ajax="false">生肖</a></li>
+            <li><a href="/mobiles/tools/analyses/ping-weishu/" data-ajax="false">尾数</a></li>
+            <li><a href="/mobiles/tools/analyses/ping-color/" data-ajax="false">波色</a></li>
             <li data-role="list-divider">属性参照表</li>
             <li><a href="#page_colors">波色</a></li>
             <li><a href="#page_zodiacs">生肖</a></li>

@@ -2,11 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UAccount extends Model
+class UAccount extends LModel
 {
-    //
+    public function merchant()
+    {
+        return $this->hasOne(UMerchantAccount::class, 'id', 'merchant_id');
+    }
+
+    public function agent()
+    {
+        return $this->hasOne(UAgentAccount::class, 'id', 'agent_id');
+    }
+
     public function login()
     {
         return $this->hasMany(UAccountLogin::class, 'account_id', 'id');

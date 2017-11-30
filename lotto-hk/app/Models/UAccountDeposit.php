@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UAccountDeposit extends Model
+class UAccountDeposit extends LModel
 {
     //
 }

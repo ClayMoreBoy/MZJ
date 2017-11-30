@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Column extends Model
+class Column extends LModel
 {
     //
     public function articles()

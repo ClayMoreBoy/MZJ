@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UAccountLogin extends Model
+class UAccountLogin extends LModel
 {
     //
     const K_PLATFORM_WAP = 'WAP';
     const K_PLATFORM_WECHAT = 'WECHAT';
     const K_PLATFORM_PC = 'PC';
+
+    protected $primaryKey = "token";
+    protected $keyType = "string";
 
     public static function generateToken()
     {

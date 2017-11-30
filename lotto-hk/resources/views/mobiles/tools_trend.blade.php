@@ -48,7 +48,7 @@
     @elseif($action == 'te-weishu')
         title = '特码尾数';height = 300;
         @foreach($te_weishus as $number=>$count)
-            labels.push('{{ $number }}');
+            labels.push('{{ $number }}尾');
             datas.push({{ $count }});
         @endforeach
     @elseif($action == 'te-color')
@@ -72,7 +72,7 @@
     @elseif($action == 'ping-weishu')
         title = '平特尾数';height = 300;
         @foreach($ping_weishus as $number=>$count)
-            labels.push('{{ $number }}');
+            labels.push('{{ $number }}尾');
             datas.push({{ $count }});
         @endforeach
     @elseif($action == 'ping-color')

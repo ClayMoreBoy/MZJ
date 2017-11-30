@@ -12,7 +12,7 @@ use App\Models\UAccountLogin;
 use Closure;
 use Illuminate\Http\Request;
 
-class UAuthVerify
+class UApiAuthVerify
 {
 
     public function handle(Request $request, Closure $next)
@@ -20,11 +20,11 @@ class UAuthVerify
         if ($this->hasAuth($request)) {
             $login = session('_login');
             if ($login->account->change_password == 0 && !strstr(request()->path(), 'mobiles/change-password')) {
-                return redirect('/mobiles/change-password/?target=/mobiles/auth/');
+                return response()->json(['code'=>403,'message'=>'没有修改初始密码']);
             }
             return $next($request);
         } else {
-            return redirect('/mobiles/login?target=' . urlencode(request()->fullUrl()));
+            return response()->json(['code'=>403,'message'=>'没有登录']);
         }
     }
 

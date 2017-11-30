@@ -21,15 +21,21 @@ Route::group(["namespace" => "Foreground"], function () {
 });
 
 Route::group(["namespace" => "Mobiles"], function () {
-    Route::get('/mobiles/auth/', 'AuthController@login');
-    Route::get('/mobiles/change-password/', 'AuthController@changePassword');
+    Route::any('/mobiles/auth/', 'AuthController@login');
+    Route::any('/mobiles/change-password/', 'AuthController@changePassword');
+    Route::any('/mobiles/logout/', 'AuthController@logout');
+
+    Route::get('/mobiles/account/balance.json', 'AuthController@balance');
 
     Route::get('/mobiles/', 'LottoController@index');
+    Route::get('/mobiles/home/', 'LottoController@index');
     Route::get('/mobiles/tools', 'LottoController@tools');
     Route::get('/mobiles/tools/analyses/{action}/', 'LottoController@toolsAnalyses');
-
     Route::get('/mobiles/columns/', 'LottoController@columns');
     Route::get('/mobiles/newspapers/', 'LottoController@newspapers');
-    Route::get('/mobiles/tz_te/', 'LottoController@tz_te');
-    Route::get('/mobiles/tz_ping/', 'LottoController@tz_ping');
+});
+
+Route::group(["namespace" => "Mobiles"], function () {
+    Route::get('/mobiles/games/te/', 'LottoController@tz_te');
+    Route::get('/mobiles/games/ping/', 'LottoController@tz_ping');
 });

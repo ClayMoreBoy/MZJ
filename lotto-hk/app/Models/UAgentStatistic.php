@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class UAgentAccountLogin extends LModel
+class UAgentStatistic extends LModel
 {
     //
 }

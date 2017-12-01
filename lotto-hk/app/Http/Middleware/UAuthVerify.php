@@ -24,7 +24,7 @@ class UAuthVerify
             }
             return $next($request);
         } else {
-            return redirect('/mobiles/login?target=' . urlencode(request()->fullUrl()));
+            return redirect('/mobiles/auth/?target=' . urlencode(request()->fullUrl()));
         }
     }
 

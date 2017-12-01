@@ -35,7 +35,17 @@ Route::group(["namespace" => "Mobiles"], function () {
     Route::get('/mobiles/newspapers/', 'LottoController@newspapers');
 });
 
-Route::group(["namespace" => "Mobiles"], function () {
-    Route::get('/mobiles/games/te/', 'LottoController@tz_te');
-    Route::get('/mobiles/games/ping/', 'LottoController@tz_ping');
+Route::group(["namespace" => "Mobiles", 'middleware' => 'auth'], function () {
+    Route::get('/mobiles/order/order_curr/', 'OrdersController@order_curr');
+    Route::get('/mobiles/order/order_history/', 'OrdersController@order_history');
+});
+
+Route::group(["namespace" => "Mobiles", 'middleware' => 'auth'], function () {
+    Route::get('/mobiles/games/te/', 'GamesController@te');
+    Route::get('/mobiles/games/ping/', 'GamesController@ping');
+});
+
+Route::group(["namespace" => "Mobiles", 'middleware' => 'auth_api'], function () {
+    Route::post('/mobiles/games/te/post/', 'GamesController@tePost');
+    Route::post('/mobiles/games/ping/post/', 'GamesController@pingPost');
 });

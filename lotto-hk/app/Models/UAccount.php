@@ -19,6 +19,11 @@ class UAccount extends LModel
         return $this->hasMany(UAccountLogin::class, 'account_id', 'id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(UOrder::class, 'account_id', 'id');
+    }
+
     /**
      * 最后登录
      * @return mixed

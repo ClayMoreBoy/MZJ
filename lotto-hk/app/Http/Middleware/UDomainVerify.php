@@ -21,9 +21,9 @@ class UDomainVerify
         $login = session('_login');
         $rs = $this->parse($request);
         if (isset($login) && isset($login->account)) {
-            View::share('account', $login->account);
-            View::share('merchant', $login->account->merchant);
-            View::share('agent', $login->account->agent);
+            View::share('account', $login->account()->first());
+            View::share('merchant', $login->account->merchant()->first());
+            View::share('agent', $login->account->agent()->first());
             if (isset($rs['merchant']) && isset($rs['agent'])) {
                 if ($login->account->merchant->id == $rs['merchant']->id && $login->account->agent->id == $rs['agent']->id) {
                     return $next($request);

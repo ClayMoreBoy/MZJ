@@ -89,7 +89,7 @@
             @elseif(isset($merchant))
                 <li>该店暂无开通任何玩法</li>
             @else
-                <li>无店铺</li>
+                <li>无店铺信息</li>
             @endif
         </ul>
     </div>
@@ -114,15 +114,26 @@
         <ul data-role="listview" data-count-theme="b">
             @if(isset($account))
                 <li data-role="list-divider"><h3>账户</h3></li>
-                <li><a href="#popupAgentInfo" data-rel="popup" data-position-to="window" data-transition="pop">充值</a>
+                <li>
+                    <a href="#popupAgentInfo" data-rel="popup" data-position-to="window" data-transition="pop">充值</a>
                 </li>
                 <li><a href="#">提现</a></li>
+                <li><a href="#">账单流水</a></li>
                 <li data-role="list-divider"><h3>订单</h3></li>
-                <li><a href="#"><span class="ui-li-count">12</span>未结算订单</a></li>
-                <li><a href="#">已结算订单</a></li>
+                <li>
+                    <a href="/mobiles/order/order_curr/" data-ajax="false">
+                        <span class="ui-li-count new">{{ $account->orders()->where('status',\App\Models\UOrder::k_status_unknown)->count() }}</span>未结算订单
+                    </a>
+                </li>
+                <li>
+                    <a href="/mobiles/order/order_history/" data-ajax="false">已结算订单</a>
+                </li>
                 <li data-role="list-divider"><h3>操作</h3></li>
-                <li><a href="/mobiles/change-password/" data-ajax="false">修改密码</a></li>
-                <li><a href="#popupLogout" data-rel="popup" data-position-to="window" data-transition="pop">退出登录</a>
+                <li>
+                    <a href="/mobiles/change-password/?target={{ urlencode(url()->current()) }}" data-ajax="false">修改密码</a>
+                </li>
+                <li>
+                    <a href="#popupLogout" data-rel="popup" data-position-to="window" data-transition="pop">退出登录</a>
                 </li>
             @endif
         </ul>
@@ -202,12 +213,13 @@
 </body>
 @yield('js')
 <script>
-    function refreshBalance() {
-        $.mobile.loading("show");
+    function refreshBalance(hideLoading) {
+        if (!hideLoading)$.mobile.loading("show");
         $.getJSON('/mobiles/account/balance.json', function (data) {
-            $.mobile.loading("hide");
+            if (!hideLoading)$.mobile.loading("hide");
             if (data.code == 0) {
                 $('#balance').html('￥' + data.balance);
+                $('.new').html(data.new_order)
             } else {
                 LAlert(data.message, 'b');
             }

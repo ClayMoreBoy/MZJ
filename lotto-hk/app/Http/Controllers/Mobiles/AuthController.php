@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mobiles;
 use App\Models\LModel;
 use App\Models\UAccount;
 use App\Models\UAccountLogin;
+use App\Models\UOrder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
@@ -131,7 +132,11 @@ class AuthController extends Controller
         $account = UAccount::query()->find($login->account->id);
         $login->account = $account;
         session(['_login' => $login]);
-        return response()->json(['code' => 0, 'balance' => number_format($account->balance, 2, '.', '')]);
+        return response()->json([
+            'code' => 0,
+            'balance' => number_format($account->balance, 2, '.', ''),
+            'new_order'=>$account->orders()->where('status',UOrder::k_status_unknown)->count(),
+        ]);
     }
 
     /**

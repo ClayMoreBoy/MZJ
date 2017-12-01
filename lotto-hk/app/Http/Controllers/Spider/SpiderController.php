@@ -2341,9 +2341,9 @@ EOD;
     public function live(Request $request)
     {
 //        $url = 'http://45.61.249.183/chajian/bmjg.js?_=' . time();
-//        $url = 'http://www.8988kj.com/chajian/bmjg.js?_='.time();
+        $url = 'http://www.8988kj.com/chajian/bmjg.js?_='.time();
 //        $url = 'http://bbmm.66kj.com/js/bmjg.js?_=' . time();
-        $url = 'https://www.ef95.com/js/i1i1i1i1i1l1l1l1l0.js?_=' . time();
+//        $url = 'https://www.ef95.com/js/i1i1i1i1i1l1l1l1l0.js?_=' . time();
         $str = $this->capture($url);
         $str = trim(str_replace('', "\n", $str));
 //        echo dump($str);

@@ -2,16 +2,10 @@
 
 @section('css')
     <link href="{{ asset('/css/mobiles/index.css') }}" rel="stylesheet">
-    <style>
-
-    </style>
 @endsection
 
 @section('title')
-    第{{ $issue->id }}期
-@endsection
-
-@section('nav')
+    {{ $game->name }}-{{ $issue->id }}期
 @endsection
 
 @section('content')
@@ -82,19 +76,23 @@
                               class="ball {{ $num_attr[$num*1]['color'] }}">
                             {{ $num<10?('0'.$num):$num }}
                         </span>
-                        <span class="odd">@45.00</span>
+                        <span class="odd">{{ '@'.number_format($game->odd, 2) }}</span>
                     </li>
                 @endforeach
             </ul>
         @endforeach
     </div>
 
-    <div data-role="popup" id="purchase" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+    <div data-role="popup" id="purchase" data-overlay-theme="b" data-theme="b" data-dismissible="false"
+         style="max-width:400px;">
         <div data-role="header" data-theme="a"><h1>确认投注</h1></div>
         <div role="main" class="ui-content">
             <p>您确定要投注<i class="odd purchase">￥0.00 </i>吗？</p>
-            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-check ui-btn-icon-left" data-rel="back">确定</a>
-            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-delete ui-btn-icon-left" data-rel="back" data-transition="flow">取消</a>
+            <a href="#" onclick="purchasePost();"
+               class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-check ui-btn-icon-left"
+               data-rel="back">确定</a>
+            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-delete ui-btn-icon-left"
+               data-rel="back" data-transition="flow">取消</a>
         </div>
     </div>
 @endsection
@@ -107,8 +105,6 @@
             <p style="margin-top: .5em;margin-bottom: 0.5em">
                 综合赔率<i class="odd">@0.00</i>；返还<i class="odd price">￥0.00</i>。
             </p>
-            <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop"
-               class="ui-btn ui-corner-all ui-btn-b ui-state-disabled" style="display: block;">￥100 投注</a>
             <div class="basket">
                 <ul>
                     {{--<li>--}}
@@ -116,6 +112,8 @@
                     {{--</li>--}}
                 </ul>
             </div>
+            <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop"
+               class="ui-btn ui-corner-all ui-btn-b ui-state-disabled" style="display: block;">￥100 投注</a>
             <p style="text-align: center;color: #bd362f;margin-top: 0.5em;margin-bottom: 0.5em;">请在开奖前10分钟投注</p>
         </div>
     </div>
@@ -202,8 +200,9 @@
             return false;
         });
 
+        var capital = 0;
         $('#capital').bind('input propertychange', function () {
-            var capital = parseFloat($(this).val());
+            capital = parseFloat($(this).val());
             if (isNaN(capital)) {
                 $('.cart a').addClass("ui-state-disabled");
                 $('.cart a').html('￥0.00 投注');
@@ -332,6 +331,59 @@
             } else {
                 $('.price').html('￥' + (capital * odd).toFixed(2) + ' ');
             }
+        }
+
+        function clean() {
+            $('#select-zodiacs').val([]);
+            $('#select-colors').val([]);
+            $('#select-uo').val([]);
+            $('#select-ds').val([]);
+            $('#select-ws').val([]);
+            selected_ball.splice(0, selected_ball.length);
+            zodiacs.splice(0, zodiacs.length);
+            colors.splice(0, colors.length);
+            dss.splice(0, dss.length);
+            uos.splice(0, uos.length);
+            wss.splice(0, wss.length);
+            $('#capital').val('');
+            reload();
+        }
+
+        function purchasePost() {
+            var balls = [];
+            for (var i = 0; i < selected_ball.length; i++) {
+                balls.push(selected_ball[i].innerText);
+            }
+            if (balls.length < 1 || balls.length > 49) {
+                LAlert('参数错误', 'b');
+                return;
+            }
+            if (capital < 2) {
+                LAlert('本金必须大于2', 'b');
+                return;
+            }
+            var balls_str = balls.join('|');
+            var token = '{{ csrf_token() }}';
+            var issue = '{{ $issue->id }}';
+            var gameId = '{{ $game->id }}';
+            $.mobile.loading("show");
+            $.post('/mobiles/games/te/post/', {
+                'total_fee': capital.toFixed(2),
+                'balls': balls_str,
+                'issue': issue,
+                'gameId': gameId,
+                '_token': token
+            }, function (data) {
+                $.mobile.loading("hide");
+                if (data.code == 0) {
+                    LAlert('下单成功', 'a');
+                    clean();
+                    refreshBalance(true);
+                } else {
+                    LAlert(data.message, 'b');
+                }
+            });
+            console.info(balls_str);
         }
     </script>
 @endsection

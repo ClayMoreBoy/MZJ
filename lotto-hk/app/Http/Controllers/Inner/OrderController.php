@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Inner;
 
 use App\Models\Issue;
-use App\Models\UAccountSell;
+use App\Models\UAccountBill;
 use App\Models\UGame;
 use App\Models\UOrder;
 use Illuminate\Http\Request;
@@ -29,12 +29,12 @@ class OrderController extends Controller
                         if ($order->save()) {
                             $order->account->balance += $order->bonus;
                             if ($order->account->save()) {
-                                $sell = new UAccountSell();
+                                $sell = new UAccountBill();
                                 $sell->account_id = $order->account_id;
                                 $sell->merchant_id = $order->merchant_id;
                                 $sell->agent_id = $order->agent_id;
                                 $sell->fee = $order->bonus;
-                                $sell->type = UAccountSell::k_type_bonus;
+                                $sell->type = UAccountBill::k_type_bonus;
                                 $sell->tid = $order->id;
                                 $sell->describe = '返奖';
                                 if ($sell->save()) {

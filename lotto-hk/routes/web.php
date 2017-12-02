@@ -25,6 +25,8 @@ Route::group(["namespace" => "Mobiles"], function () {
     Route::any('/mobiles/change-password/', 'AuthController@changePassword');
     Route::any('/mobiles/logout/', 'AuthController@logout');
 
+    Route::any('/mobiles/bills/', 'AuthController@bills');
+
     Route::get('/mobiles/account/balance.json', 'AuthController@balance');
 
     Route::get('/mobiles/', 'LottoController@index');

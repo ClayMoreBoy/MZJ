@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Mobiles;
 
 use App\Models\LModel;
 use App\Models\UAccount;
+use App\Models\UAccountBill;
 use App\Models\UAccountLogin;
 use App\Models\UOrder;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->only(['changePassword']);
+        $this->middleware('auth')->only(['changePassword', 'bills']);
         $this->middleware('auth_api')->only(['balance']);
     }
 
@@ -126,6 +127,13 @@ class AuthController extends Controller
         return back()->withCookies([$c]);
     }
 
+    public function bills(Request $request)
+    {
+        $login = session('_login');
+        $bills = $login->account->bills()->orderBy('created_at', 'desc')->paginate(20);
+        return view('mobiles.bills', ['bills' => $bills]);
+    }
+
     public function balance(Request $request)
     {
         $login = session('_login');
@@ -135,7 +143,7 @@ class AuthController extends Controller
         return response()->json([
             'code' => 0,
             'balance' => number_format($account->balance, 2, '.', ''),
-            'new_order'=>$account->orders()->where('status',UOrder::k_status_unknown)->count(),
+            'new_order' => $account->orders()->where('status', UOrder::k_status_unknown)->count(),
         ]);
     }
 

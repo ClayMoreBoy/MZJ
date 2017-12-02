@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Mobiles;
 use App\Models\Issue;
 use App\Models\LModel;
 use App\Models\UAccount;
-use App\Models\UAccountSell;
+use App\Models\UAccountBill;
 use App\Models\UOrder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -85,12 +85,12 @@ class GamesController extends BaseController
             if ($order->save()) {
                 $account->balance = $account->balance - $total_fee;//扣除账户余额
                 if ($account->save()) {
-                    $sell = new UAccountSell();
+                    $sell = new UAccountBill();
                     $sell->account_id = $order->account_id;
                     $sell->merchant_id = $order->merchant_id;
                     $sell->agent_id = $order->agent_id;
                     $sell->fee = $order->total_fee * -1;
-                    $sell->type = UAccountSell::k_type_buy;
+                    $sell->type = UAccountBill::k_type_buy;
                     $sell->tid = $order->id;
                     $sell->describe = '消费';
                     if ($sell->save()) {

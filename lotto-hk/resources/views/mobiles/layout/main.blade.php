@@ -118,7 +118,7 @@
                     <a href="#popupAgentInfo" data-rel="popup" data-position-to="window" data-transition="pop">充值</a>
                 </li>
                 <li><a href="#">提现</a></li>
-                <li><a href="#">账单流水</a></li>
+                <li><a href="/mobiles/bills/" data-ajax="false">账单流水</a></li>
                 <li data-role="list-divider"><h3>订单</h3></li>
                 <li>
                     <a href="/mobiles/order/order_curr/" data-ajax="false">

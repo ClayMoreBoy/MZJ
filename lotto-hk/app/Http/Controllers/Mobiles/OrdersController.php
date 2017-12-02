@@ -19,7 +19,7 @@ class OrdersController extends BaseController
     public function order_curr(Request $request)
     {
         $login = session('_login');
-        $orders = $login->account->orders()->where('status', UOrder::k_status_unknown)->get();
+        $orders = $login->account->orders()->where('status', UOrder::k_status_unknown)->orderBy('created_at','desc')->get();
         $result = [];
         foreach ($orders as $order) {
             $result[$order->issue][] = $order;

@@ -12,6 +12,8 @@
         <h1 class="title">工具图表</h1>
         <a href="#" data-rel="back"
            class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-back ui-nodisc-icon ui-alt-icon ui-btn-left"></a>
+        <a href="/mobiles/home/" data-ajax="false"
+           class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-home ui-nodisc-icon ui-alt-icon ui-btn-right"></a>
         <div class="ui-bar">
             <select id="select-zodiacs" data-native-menu="false" onchange="changeIssueCount(this)">
                 <option>选择期数</option>

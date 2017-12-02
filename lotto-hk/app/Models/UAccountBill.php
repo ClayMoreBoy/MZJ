@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UAccountSell extends Model
+class UAccountBill extends Model
 {
     const k_type_bonus = 'bonus';//返奖
     const k_type_buy = 'buy';//消费

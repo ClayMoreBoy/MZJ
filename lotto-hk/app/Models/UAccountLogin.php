@@ -4,7 +4,6 @@ namespace App\Models;
 
 class UAccountLogin extends LModel
 {
-    //
     const K_PLATFORM_WAP = 'WAP';
     const K_PLATFORM_WECHAT = 'WECHAT';
     const K_PLATFORM_PC = 'PC';

@@ -1,46 +1,41 @@
 <?php
-namespace App\Http\Controllers\Mobiles;
+namespace App\Http\Controllers\Merchant;
 
 use App\Models\LModel;
-use App\Models\UAccount;
-use App\Models\UAccountLogin;
-use App\Models\UAccountWithdraw;
-use App\Models\UOrder;
+use App\Models\UMerchantAccount;
+use App\Models\UMerchantAccountLogin;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
 
-    const LOTTO_AUTH_TOKEN = "LOTTO_AUTH_TOKEN";
+    const LOTTO_AUTH_TOKEN = "LOTTO_MERCHANT_AUTH_TOKEN";
 
     const LOTTO_AUTH_TOKEN_EXPIRED = 7;
 
     public function __construct()
     {
-        $this->middleware('auth')->only(['changePassword', 'bills']);
         $this->middleware('auth_api')->only(['balance']);
     }
 
     public function login(Request $request)
     {
         $phone = $request->input("phone");
-        $target = $request->input('target', '/mobiles/');
+        $target = $request->input('target', '/merchant/');
         $result = ['target' => $target, 'phone' => $phone];
         if ($request->isMethod('post')) {
             $password = $request->input('password');
             if (empty($phone) || empty($password)) {//数据验证
                 $result['error'] = '账号或者密码不能为空!';
             } else {
-                $account = UAccount::query()->where("phone", $phone)->first();
+                $account = UMerchantAccount::query()->where("phone", $phone)->first();
                 if (empty($account) || $account->password != sha1($account->salt . $password)) {
                     $result['error'] = '账号或者密码错误!';
                 } else {
-                    $token = UAccountLogin::generateToken();
-                    $al = new UAccountLogin();
+                    $token = UMerchantAccountLogin::generateToken();
+                    $al = new UMerchantAccountLogin();
                     $al->token = $token;
                     $al->account_id = $account->id;
                     $domain = parse_url($request->fullUrl(), PHP_URL_HOST);
@@ -52,11 +47,11 @@ class AuthController extends Controller
                     if ($al->save()) {
                         $account->last_access_at = date_create();
                         $account->save();
-                        session(['_login' => $al]);
+                        session(['_login_merchant' => $al]);
                         if ($account->change_password == 0) {
-                            return redirect('/mobiles/change-password/?target=/mobiles/auth/');
+                            return redirect('/merchant/change-password/?target=/merchant/auth/');
                         }
-                        $logins = UAccountLogin::query()
+                        $logins = UMerchantAccountLogin::query()
                             ->where(['account_id' => $account->id, 'status' => 1, 'platform' => $platform])
                             ->where('token', '<>', $token)
                             ->get();
@@ -76,13 +71,13 @@ class AuthController extends Controller
                 }
             }
         }
-        return view('mobiles.login', $result);
+        return view('merchant.login', $result);
     }
 
     public function changePassword(Request $request)
     {
-        $login = session('_login');
-        $target = $request->input('target', '/mobiles/');
+        $login = session('_login_merchant');
+        $target = $request->input('target', '/merchant/');
         $result = ['account' => $login->account, 'target' => $target];
         if ($request->isMethod('post')) {
             $password = $request->input('password');
@@ -114,51 +109,14 @@ class AuthController extends Controller
                 }
             }
         }
-        return view('mobiles.change_password', $result);
+        return view('merchant.change_password', $result);
     }
 
     public function logout(Request $request)
     {
         $c = cookie(self::LOTTO_AUTH_TOKEN, null);
-        $request->session()->remove('_login');
+        $request->session()->remove('_login_merchant');
         return back()->withCookies([$c]);
-    }
-
-    public function withdraw(Request $request)
-    {
-        $login = session('_login');
-        $result = [];
-        if ($request->isMethod('post')) {
-            if (!$request->has('fee')) {
-                $result['error'] = '提现金额不能为空';
-            } elseif ($request->fee <= 0 || $request->fee > $login->account->balance) {
-                $result['error'] = '无效的提现金额';
-            } else {
-                $withdraw = new UAccountWithdraw();
-                $withdraw->account_id = $login->account->id;
-                $withdraw->merchant_id = $login->account->merchant_id;
-                $withdraw->agent_id = $login->account->agent_id;
-                $withdraw->fee = $request->fee;
-                $withdraw->status = UAccountWithdraw::k_status_waiting;
-                DB::beginTransaction();
-                if ($withdraw->save()) {
-                    $login->account->balance = $login->account->balance - $request->fee;
-                    if ($login->account->save()) {
-                        View::share('account', $login->account);
-                        DB::commit();
-                    } else {
-                        $result['error'] = '服务器异常，请稍后重试';
-                        DB::rollBack();
-                    }
-                } else {
-                    $result['error'] = '服务器异常，请稍后重试';
-                    DB::rollBack();
-                }
-            }
-        }
-        $withdraws = $login->account->withdraws()->orderBy('created_at', 'desc')->paginate(20);
-        $result['withdraws'] = $withdraws;
-        return view('mobiles.withdraw', $result);
     }
 
     public function bills(Request $request)
@@ -166,19 +124,6 @@ class AuthController extends Controller
         $login = session('_login');
         $bills = $login->account->bills()->orderBy('created_at', 'desc')->paginate(20);
         return view('mobiles.bills', ['bills' => $bills]);
-    }
-
-    public function balance(Request $request)
-    {
-        $login = session('_login');
-        $account = UAccount::query()->find($login->account->id);
-        $login->account = $account;
-        session(['_login' => $login]);
-        return response()->json([
-            'code' => 0,
-            'balance' => number_format($account->balance, 2, '.', ''),
-            'new_order' => $account->orders()->where('status', UOrder::k_status_unknown)->count(),
-        ]);
     }
 
     /**
@@ -190,13 +135,13 @@ class AuthController extends Controller
     {
         $userAgent = $request->header('user_agent', '');
         if (strpos($userAgent, 'MicroMessenger') !== false) {
-            return UAccountLogin::K_PLATFORM_WECHAT;
+            return UMerchantAccountLogin::K_PLATFORM_WECHAT;
         }
         $keywords = ['iPhone', 'iPod', 'iPad', 'Android', 'IEMobile'];
         if (preg_match("/(" . implode('|', $keywords) . ")/i", $userAgent)) {
-            return UAccountLogin::K_PLATFORM_WAP;
+            return UMerchantAccountLogin::K_PLATFORM_WAP;
         }
-        return UAccountLogin::K_PLATFORM_PC;
+        return UMerchantAccountLogin::K_PLATFORM_PC;
     }
 
 }

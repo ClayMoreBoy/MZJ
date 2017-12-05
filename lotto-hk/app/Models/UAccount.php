@@ -29,6 +29,16 @@ class UAccount extends LModel
         return $this->hasMany(UAccountBill::class, 'account_id', 'id');
     }
 
+    public function withdraws()
+    {
+        return $this->hasMany(UAccountWithdraw::class, 'account_id', 'id');
+    }
+
+    public function deposits()
+    {
+        return $this->hasMany(UAccountDeposit::class, 'account_id', 'id');
+    }
+
     /**
      * 最后登录
      * @return mixed

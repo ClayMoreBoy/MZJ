@@ -76,7 +76,6 @@
         .money.clean,.money.un-hit {
             color: #9BA2AB;
             text-decoration: line-through;
-
         }
 
         .unknown {
@@ -120,22 +119,21 @@
                             </div>
                             <div class="items" style="clear: left">
                                 <span class="fee">
-                                    本金:<strong
-                                            class="money">{{ '￥'.number_format($order->total_fee,2,'.','') }}</strong>
+                                    本金：<strong class="money">{{ '￥'.number_format($order->total_fee,2,'.','') }}</strong>
                                 </span>
                                 <span class="odd">
-                                    赔率:<strong class="money">{{ '@'.number_format($order->odd,2,'.','') }}</strong>
+                                    赔率：<strong class="money">{{ '@'.number_format($order->odd,2,'.','') }}</strong>
                                 </span>
                                 <span class="bonus">
-                                    返还:<strong class="money {{ $order->statusCSS() }}">{{ '￥'.number_format($order->bonus,2,'.','') }}</strong>
+                                    返还：<strong class="money {{ $order->statusCSS() }}">{{ '￥'.number_format($order->bonus,2,'.','') }}</strong>
                                 </span>
                             </div>
                             <div class="items">
                                 <span class="status">
-                                    状态:<strong class="{{ $order->statusCSS() }}">{{ $order->statusCN() }}</strong>
+                                    状态：<strong class="{{ $order->statusCSS() }}">{{ $order->statusCN() }}</strong>
                                 </span>
                                 <span class="date">
-                                    <strong>{{ substr($order->created_at,0,16) }}</strong>
+                                    时间：<strong class="unknown">{{ substr($order->created_at,0,16) }}</strong>
                                 </span>
                             </div>
                         </li>

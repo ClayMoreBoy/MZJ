@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/', function (){
+    return redirect('/mobiles/');
+});
+
 Route::group(["namespace" => "Foreground"], function () {
     Route::get('/', 'LottoController@index');
     Route::get('/home/', 'LottoController@home');
@@ -25,7 +29,8 @@ Route::group(["namespace" => "Mobiles"], function () {
     Route::any('/mobiles/change-password/', 'AuthController@changePassword');
     Route::any('/mobiles/logout/', 'AuthController@logout');
 
-    Route::any('/mobiles/bills/', 'AuthController@bills');
+    Route::any('/mobiles/withdraw/', 'AuthController@withdraw');
+    Route::get('/mobiles/bills/', 'AuthController@bills');
 
     Route::get('/mobiles/account/balance.json', 'AuthController@balance');
 

@@ -37,9 +37,24 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\UDomainVerify::class,
         ],
 
-        'api' => [
-            'throttle:60,1',
-            'bindings',
+        'merchant' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\Merchant\MerchantDomainVerify::class,
+        ],
+
+        'agent' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\Agent\AgentDomainVerify::class,
         ],
     ];
 
@@ -55,5 +70,9 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'auth' => \App\Http\Middleware\UAuthVerify::class,
         'auth_api' => \App\Http\Middleware\UApiAuthVerify::class,
+        'merchant_auth' => \App\Http\Middleware\Merchant\MerchantAuthVerify::class,
+        'merchant_auth_api' => \App\Http\Middleware\Merchant\MerchantApiAuthVerify::class,
+        'agent_auth' => \App\Http\Middleware\Agent\AgentAuthVerify::class,
+        'agent_auth_api' => \App\Http\Middleware\Agent\AgentApiAuthVerify::class,
     ];
 }

@@ -35,6 +35,7 @@ class OrdersController extends BaseController
 //            ->where('account_id',$login->account_id)
             ->where('status', UOrder::k_status_done)
             ->orderBy('issue','desc')
+            ->orderBy('created_at','desc')
             ->paginate(20);
         $result = [];
         foreach ($orders as $order) {

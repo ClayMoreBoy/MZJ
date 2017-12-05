@@ -117,7 +117,7 @@
                 <li>
                     <a href="#popupAgentInfo" data-rel="popup" data-position-to="window" data-transition="pop">充值</a>
                 </li>
-                <li><a href="#">提现</a></li>
+                <li><a href="/mobiles/withdraw/" data-ajax="false">提现</a></li>
                 <li><a href="/mobiles/bills/" data-ajax="false">账单流水</a></li>
                 <li data-role="list-divider"><h3>订单</h3></li>
                 <li>
@@ -220,6 +220,8 @@
             if (data.code == 0) {
                 $('#balance').html('￥' + data.balance);
                 $('.new').html(data.new_order)
+            } else if (data.code == 403) {
+                location.reload();
             } else {
                 LAlert(data.message, 'b');
             }

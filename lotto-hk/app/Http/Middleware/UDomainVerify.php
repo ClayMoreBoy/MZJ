@@ -21,7 +21,12 @@ class UDomainVerify
         $login = session('_login');
         $rs = $this->parse($request);
         if (isset($login) && isset($login->account)) {
-            View::share('account', $login->account()->first());
+            $accountDB = $login->account()->first();
+            if ($accountDB->balance != $login->account->balance) {
+                $login->account = $accountDB;
+                session(['_login' => $login]);
+            }
+            View::share('account', $accountDB);
             View::share('merchant', $login->account->merchant()->first());
             View::share('agent', $login->account->agent()->first());
             if (isset($rs['merchant']) && isset($rs['agent'])) {

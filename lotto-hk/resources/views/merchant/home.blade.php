@@ -74,7 +74,7 @@
         <ul data-role="listview">
             <li data-role="list-divider">用户管理</li>
             <li><a href="/merchant/order/search/" data-ajax="false">订单列表</a></li>
-            <li><a href="#" data-ajax="false">用户列表</a></li>
+            <li><a href="/merchant/user/search/" data-ajax="false">用户列表</a></li>
             <li><a href="#" data-ajax="false">新用户<span class="ui-li-count">4</span></a></li>
             <li data-role="list-divider">代理人管理</li>
             <li><a href="#" data-ajax="false">代理人列表</a></li>

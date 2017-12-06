@@ -35,30 +35,30 @@ class OrderController extends Controller
             $issue = Issue::query()->find($request->issue);
             if (isset($issue)) {
                 $result['c_issue'] = $issue;
-                $query->where('issue', $request->issue);
+                $query->where('u_orders.issue', $request->issue);
             }
         }
-        if ($request->has('account_id')) {
-            $account = UAccount::query()->find($request->account_id);
-            if (isset($account)) {
-                $result['c_account'] = $account;
-                $query->where('account_id', $request->account_id);
-            }
+        $query->leftJoin('u_accounts', 'u_accounts.id', '=', 'u_orders.account_id');
+        if ($request->has('nickname')) {
+            $result['nickname'] = $request->nickname;
+            $query->where('u_accounts.nickname', 'like', '%' . $request->nickname . '%');
+            $query->select('u_orders.*');
         }
         if ($request->has('agent_id')) {
             $agent = UAgentAccount::query()->find($request->agent_id);
             if (isset($agent)) {
                 $result['c_agent'] = $agent;
-                $query->where('agent_id', $request->agent_id);
+                $query->where('u_orders.agent_id', $request->agent_id);
             }
         }
         if ($request->has('game_id')) {
             $game = UMerchantGame::query()->find($request->game_id);
             if (isset($game)) {
                 $result['c_game'] = $game;
-                $query->where('game_id', $request->game_id);
+                $query->where('u_orders.game_id', $request->game_id);
             }
         }
+        $query->orderBy('u_orders.created_at', 'desc');
         $orders = $query->paginate(20);
         if (isset($issue)) {
             $orders->appends(['issue' => $issue->id]);
@@ -72,7 +72,7 @@ class OrderController extends Controller
         if (isset($game)) {
             $orders->appends(['game_id' => $game->id]);
         }
-        $result['orders'] = $query->paginate(20);
+        $result['orders'] = $orders;
         return view('merchant.order_search', $result);
     }
 

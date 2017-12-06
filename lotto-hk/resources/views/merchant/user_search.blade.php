@@ -134,28 +134,20 @@
                 @endforeach
             </select>
 
-            <label for="game_id" class="select">玩法:</label>
-            <select name="game_id" id="game_id">
-                <option value="0">请选择</option>
-                @foreach($games as $items)
-                    <option value="{{ $items->id }}"
-                            @if(isset($c_game) && $items->id == $c_game->id) selected="selected" @endif>{{ $items->name }}</option>
-                @endforeach
-            </select>
-
-            <label for="issue" class="select">期数:</label>
-            <select name="issue" id="issue">
-                <option value="0">请选择</option>
-                @foreach($issues as $items)
-                    <option value="{{ $items->id }}"
-                            @if(isset($c_issue) && $items->id == $c_issue->id) selected="selected" @endif>
-                        {{ $items->id }}
-                    </option>
-                @endforeach
-            </select>
-
             <label for="nickname">用户昵称:</label>
             <input type="text" data-clear-btn="true" name="nickname" id="nickname" value="{{ $nickname or '' }}">
+
+            <label for="sort_at" class="select">排序项:</label>
+            <select name="sort_at" id="sort_at">
+                <option value="created_at" {{ isset($sort_at)&&$sort_at=='created_at'?'selected':'' }}>注册时间</option>
+                <option value="balance" {{ isset($sort_at)&&$sort_at=='balance'?'selected':'' }}>余额</option>
+            </select>
+
+            <label for="sort_rule" class="select">排序规则:</label>
+            <select name="sort_rule" id="sort_rule">
+                <option value="desc" {{ isset($sort_rule)&&$sort_rule=='desc'?'selected':'' }}>倒序</option>
+                <option value="asc" {{ isset($sort_rule)&&$sort_rule=='asc'?'selected':'' }}>正序</option>
+            </select>
 
             <button type="submit" data-theme="b">搜索</button>
         </form>
@@ -164,70 +156,55 @@
     <div role="main" class="ui-content">
         <div style="margin:-1em -.5em;">
             <div class="conditions">
-                @if(isset($c_issue))
-                    <p><span class="label">期数：</span><span class="condition">第{{ $c_issue->id }}期</span></p>
-                @endif
                 @if(isset($nickname))
-                    <p><span class="label">用户：</span><span class="condition">{{ $nickname }}</span></p>
+                    <p><span class="label">用户昵称：</span><span class="condition">{{ $nickname }}</span></p>
                 @endif
                 @if(isset($c_agent))
                     <p><span class="label">代理人：</span><span class="condition">{{ $c_agent->name }}</span></p>
                 @endif
-                @if(isset($c_game))
-                    <p><span class="label">玩法：</span><span class="condition">{{ $c_game->name }}</span></p>
-                @endif
             </div>
             <ul data-role="listview" data-inset="true">
-                @foreach($orders as $order)
+                @foreach($accounts as $account)
                     <li>
-                        <h3>{{ '第'.$order->issue.'期-'.$order->game->name }}</h3>
+                        <h3>{{ $account->nickname }}</h3>
                         <div class="items">
-                            @foreach(explode('|',$order->items) as $item)
-                                <span class="ball {{ str_contains($item,$order->hit_item)?'hit':'' }}">{{ $item }}</span>
-                            @endforeach
-                        </div>
-                        <div class="items" style="clear: left">
-                            <span class="fee">
-                                本金：<strong class="money">{{ '￥'.number_format($order->total_fee,2,'.','') }}</strong>
+                            <span class="status">
+                                手机号码：<strong class="unknown">{{ $account->phone }}</strong>
                             </span>
-                            <span class="odd">
-                                赔率：<strong class="money">{{ '@'.number_format($order->odd,2,'.','') }}</strong>
-                            </span>
-                            <span class="bonus">
-                                返还：<strong
-                                        class="money {{ $order->statusCSS() }}">{{ '￥'.number_format($order->bonus,2,'.','') }}</strong>
+                            <span class="date">
+                                代理人：<strong class="unknown">{{ $account->agent->name }}</strong>
                             </span>
                         </div>
                         <div class="items">
                             <span class="status">
-                                状态：<strong class="{{ $order->statusCSS() }}">{{ $order->statusCN() }}</strong>
+                                余额：<strong class="unknown">{{ $account->balance }}</strong>
                             </span>
                             <span class="date">
-                                时间：<strong class="unknown">{{ substr($order->created_at,0,16) }}</strong>
+                                总消费：<strong class="unknown">{{ $account->orders()->whereIn('status',[0,1])->sum('total_fee') }}</strong>
                             </span>
                         </div>
                         <div class="items">
                             <span class="status">
-                                代理人：<strong class="unknown">{{ $order->agent->name }}</strong>
+                                注册时间：<strong class="unknown">{{ substr($account->created_at,2,11) }}</strong>
                             </span>
                             <span class="date">
-                                用户：<strong class="unknown">{{ $order->account->nickname }}</strong>
+                                最后访问：<strong class="unknown">{{ substr($account->updated_at,2,11) }}</strong>
                             </span>
                         </div>
                     </li>
                 @endforeach
             </ul>
             <div data-role="controlgroup" data-type="horizontal" data-mini="true">
-                <a href="{{ $orders->url(1) }}"
-                   class="ui-btn ui-corner-all {{ $orders->currentPage()==1?'ui-state-disabled':'' }}"> 首页 </a>
-                <a href="{{ $orders->previousPageUrl() }}"
-                   class="ui-btn ui-corner-all {{ $orders->currentPage()==1?'ui-state-disabled':'' }}"> 上一页 </a>
-                <a href="#" class="ui-btn ui-corner-all">{{ $orders->currentPage() }}</a>
-                <a href="{{ $orders->nextPageUrl() }}"
-                   class="ui-btn ui-corner-all {{ $orders->currentPage()==$orders->lastPage()?'ui-state-disabled':'' }}">
+                <a href="{{ $accounts->url(1) }}"
+                   class="ui-btn ui-corner-all {{ $accounts->currentPage()==1?'ui-state-disabled':'' }}"> 首页 </a>
+                <a href="{{ $accounts->previousPageUrl() }}"
+                   class="ui-btn ui-corner-all {{ $accounts->currentPage()==1?'ui-state-disabled':'' }}"> 上一页 </a>
+                <a href="#" class="ui-btn ui-corner-all">{{ $accounts->currentPage() }}</a>
+                <a href="{{ $accounts->nextPageUrl() }}"
+                   class="ui-btn ui-corner-all {{ $accounts->currentPage()==$accounts->lastPage()?'ui-state-disabled':'' }}">
                     下一页 </a>
-                <a href="{{ $orders->url($orders->lastPage()) }}"
-                   class="ui-btn ui-corner-all {{ $orders->currentPage()==$orders->lastPage()?'ui-state-disabled':'' }}">
+                <a href="{{ $accounts->url($accounts->lastPage()) }}"
+                   class="ui-btn ui-corner-all {{ $accounts->currentPage()==$accounts->lastPage()?'ui-state-disabled':'' }}">
                     尾页 </a>
             </div>
         </div>

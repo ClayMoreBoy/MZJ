@@ -20,5 +20,6 @@ Route::group(["namespace" => "Merchant", 'middleware' => 'merchant_auth'], funct
 
 Route::group(["namespace" => "Merchant", 'middleware' => 'merchant_auth'], function () {
     Route::get('/order/search/', 'OrderController@search');
+    Route::get('/user/search/', 'UserController@search');
 });
 

@@ -27,14 +27,14 @@ class MerchantDomainVerify
             View::share('account', $login->account);
             if (isset($rs['merchant'])) {
                 if ($login->account->id == $rs['merchant']->id) {
-                    View::share('domain', $scheme . '://' . $login->account->domain . '.' . $rs['domain']);
+                    View::share('domain', $login->account->domain . '.' . $rs['domain']);
                     return $next($request);
                 }
             }
 
-            $domain = $login->account->domain . '.' . $rs['domain'];
+            $domain = $rs['domain'];
             if ($domain_old == $domain) {
-                View::share('domain', $scheme . '://' . $domain);
+                View::share('domain', $domain);
                 return $next($request);
             } else {
                 return redirect($scheme . '://' . $login->account->domain . '.' . $rs['domain'] . $path);

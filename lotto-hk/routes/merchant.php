@@ -18,8 +18,24 @@ Route::group(["namespace" => "Merchant", 'middleware' => 'merchant_auth'], funct
     Route::any('/logout/', 'AuthController@logout');
 });
 
+Route::group(["namespace" => "Merchant", 'middleware' => 'merchant_auth_api'], function () {
+    Route::post('/agent/edit/update/', 'AgentController@update');
+    Route::post('/game/update/', 'GameController@update');
+});
+
 Route::group(["namespace" => "Merchant", 'middleware' => 'merchant_auth'], function () {
     Route::get('/order/search/', 'OrderController@search');
     Route::get('/user/search/', 'UserController@search');
+    Route::get('/user/today/', 'UserController@today');
+
+    Route::get('/agent/search/', 'AgentController@search');
+    Route::get('/agent/view/{id}/', 'AgentController@view');
+    Route::any('/agent/create/', 'AgentController@create');
+    Route::get('/agent/edit/{id}/', 'AgentController@edit');
 });
+
+Route::group(["namespace" => "Merchant", 'middleware' => 'merchant_auth'], function () {
+    Route::get('/game/setting/', 'GameController@setting');
+});
+
 

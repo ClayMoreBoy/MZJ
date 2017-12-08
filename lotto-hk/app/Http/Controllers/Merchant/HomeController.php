@@ -27,13 +27,14 @@ class HomeController extends Controller
                 $total_bonus = $orders->where('hit', UOrder::k_hit_win)->sum('bonus');//总返奖
                 $commission = $total_sell * 0.05;
                 $profit = $total_sell - $total_bonus - $commission;
-                $report[$issue->id.''] = ['status' => 'done', 'total_sell' => $total_sell, 'total_bonus' => $total_bonus, 'commission' => $commission, 'profit' => $profit];
+                $report[$issue->id . ''] = ['status' => 'done', 'total_sell' => $total_sell, 'total_bonus' => $total_bonus, 'commission' => $commission, 'profit' => $profit];
             } else {//未开奖
                 $total_sell = $orders->sum('total_fee');//总销售
-                $report[$issue->id.''] = ['status' => 'unknown', 'total_sell' => $total_sell, 'total_bonus' => 0, 'commission' => 0, 'profit' => 0];
+                $report[$issue->id . ''] = ['status' => 'unknown', 'total_sell' => $total_sell, 'total_bonus' => 0, 'commission' => 0, 'profit' => 0];
             }
         }
         $result['report'] = $report;
+        $result['new_account'] = $login->account->accounts()->where('created_at', '>', date_create('today'))->count();
         return view('merchant.home', $result);
     }
 

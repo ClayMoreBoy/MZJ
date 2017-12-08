@@ -51,4 +51,14 @@ class UserController extends Controller
         return view('merchant.user_search', $result);
     }
 
+    public function today(Request $request)
+    {
+        $result = [];
+        $login = session('_login_merchant');
+        $query = $login->account->accounts()->where('created_at', '>', date_create('today'));
+        $accounts = $query->get();
+        $result['accounts'] = $accounts;
+        return view('merchant.today_account', $result);
+    }
+
 }

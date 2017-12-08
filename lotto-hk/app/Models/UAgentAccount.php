@@ -28,4 +28,9 @@ class UAgentAccount extends LModel
     {
         return $this->hasMany(UAccountDeposit::class, 'agent_id', 'id');
     }
+
+    public function statistics()
+    {
+        return $this->hasMany(UAgentStatistic::class, 'agent_id', 'id');
+    }
 }

@@ -75,21 +75,20 @@
             <li data-role="list-divider">用户管理</li>
             <li><a href="/merchant/order/search/" data-ajax="false">订单列表</a></li>
             <li><a href="/merchant/user/search/" data-ajax="false">用户列表</a></li>
-            <li><a href="#" data-ajax="false">新用户<span class="ui-li-count">4</span></a></li>
+            <li><a href="/merchant/user/today/" data-ajax="false">新用户<span class="ui-li-count">{{ $new_account }}</span></a></li>
             <li data-role="list-divider">代理人管理</li>
-            <li><a href="#" data-ajax="false">代理人列表</a></li>
-            <li><a href="#" data-ajax="false">新增代理人</a></li>
+            <li><a href="/merchant/agent/search/" data-ajax="false">代理人列表</a></li>
+            <li><a href="/merchant/agent/create/" data-ajax="false">新增代理人</a></li>
             <li data-role="list-divider">财务报表</li>
             <li><a href="#" data-ajax="false">销售统计</a></li>
             <li><a href="#" data-ajax="false">代理人统计</a></li>
             <li><a href="#" data-ajax="false">用户统计</a></li>
             <li data-role="list-divider">设置</li>
-            <li><a href="#" data-ajax="false">玩法配置</a></li>
+            <li><a href="/merchant/game/setting/" data-ajax="false">玩法配置</a></li>
             <li><a href="#" data-ajax="false">赔率设置</a></li>
-            <li><a href="#" data-ajax="false">代理人返点</a></li>
             <li data-role="list-divider">个人信息</li>
-            <li><a href="#" data-ajax="false">修改密码</a></li>
-            <li><a href="#" data-ajax="false">退出登录</a></li>
+            <li><a href="/merchant/change-password/" data-ajax="false">修改密码</a></li>
+            <li><a href="/merchant/logout/" data-ajax="false">退出登录</a></li>
         </ul>
         <div class="footer">
             <p>

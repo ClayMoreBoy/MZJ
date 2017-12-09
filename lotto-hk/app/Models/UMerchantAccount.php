@@ -37,4 +37,8 @@ class UMerchantAccount extends LModel
     public function orders(){
         return $this->hasMany(UOrder::class, 'merchant_id', 'id');
     }
+
+    public function statistics(){
+        return $this->hasMany(UMerchantStatistic::class, 'merchant_id', 'id');
+    }
 }

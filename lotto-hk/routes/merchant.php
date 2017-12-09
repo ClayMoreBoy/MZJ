@@ -25,6 +25,12 @@ Route::group(["namespace" => "Merchant", 'middleware' => 'merchant_auth_api'], f
 
 Route::group(["namespace" => "Merchant", 'middleware' => 'merchant_auth'], function () {
     Route::get('/order/search/', 'OrderController@search');
+    Route::get('/order/issue/', 'OrderController@issue');
+
+    Route::get('/report/issue/', 'ReportController@issue');
+    Route::get('/report/agent/', 'ReportController@agent');
+    Route::get('/report/account/', 'ReportController@account');
+
     Route::get('/user/search/', 'UserController@search');
     Route::get('/user/today/', 'UserController@today');
 

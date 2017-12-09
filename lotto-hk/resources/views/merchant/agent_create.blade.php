@@ -26,31 +26,31 @@
                 {{--<label for="phone">手机号码</label>--}}
                 <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
                     <button disabled="disabled">手机</button>
-                    <input type="text" name="phone" size="16" placeholder="" value="{{ request('phone','') }}"
+                    <input type="text" name="phone" size="20" placeholder="" value="{{ request('phone','') }}"
                            data-wrapper-class="controlgroup-textinput ui-btn">
                 </div>
                 {{--<label for="password">密码:</label>--}}
                 <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
                     <button disabled="disabled">密码</button>
-                    <input type="text" name="password" size="16" placeholder="" value="{{ request('password','') }}"
+                    <input type="text" name="password" size="20" placeholder="" value="{{ request('password','') }}"
                            data-wrapper-class="controlgroup-textinput ui-btn">
                 </div>
                 {{--<label for="name">代理名称:</label>--}}
                 <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
                     <button disabled="disabled">名称</button>
-                    <input type="text" name="name" size="16" placeholder="" value="{{ request('name','') }}"
+                    <input type="text" name="name" size="20" placeholder="" value="{{ request('name','') }}"
                            data-wrapper-class="controlgroup-textinput ui-btn">
                 </div>
                 {{--<label for="commission">佣金:</label>--}}
                 <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
                     <button disabled="disabled">佣金</button>
-                    <input type="text" name="commission" size="16" placeholder=""
+                    <input type="text" name="commission" size="20" placeholder=""
                            value="{{ request('commission','') }}" data-wrapper-class="controlgroup-textinput ui-btn">
                 </div>
                 {{--<label for="currency-controlgroup">Value</label>--}}
                 <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
                     <button disabled="disabled">域名</button>
-                    <input name="prefix_domain" type="text" size="8" placeholder=""
+                    <input name="prefix_domain" type="text" size="10" placeholder=""
                            value="{{ request('prefix_domain','') }}"
                            data-wrapper-class="controlgroup-textinput ui-btn">
                     <button disabled="disabled">{{ $domain or '' }}</button>
@@ -58,7 +58,7 @@
                 {{--<label for="wx_account">微信号:</label>--}}
                 <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
                     <button disabled="disabled">微信号</button>
-                    <input type="text" name="wx_account" size="16" placeholder="" value="{{ request('wx_account','') }}"
+                    <input type="text" name="wx_account" size="20" placeholder="" value="{{ request('wx_account','') }}"
                            data-wrapper-class="controlgroup-textinput ui-btn">
                 </div>
                 <input type="hidden" name="wx_qr" id="wx_qr" value="{{ request('wx_qr','') }}">

@@ -6,7 +6,6 @@
     <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.js"></script>
     <script src="{{ url('/js/alert.js') }}"></script>
-    <script src="{{ url('/js/alert.js') }}"></script>
     <style>
         .controlgroup-textinput {
             padding: .11em 0;

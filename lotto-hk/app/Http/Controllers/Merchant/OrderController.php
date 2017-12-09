@@ -76,4 +76,50 @@ class OrderController extends Controller
         return view('merchant.order_search', $result);
     }
 
+    public function issue(Request $request)
+    {
+        $issue_id = $request->input('issue');
+        if ($request->has('issue')) {
+            $issue = Issue::query()->find($issue_id);
+        }
+        if (!isset($issue)) {
+            $issue = Issue::query()
+//                ->where('status', '<', Issue::k_status_done)
+                ->where('date', '<', date_create('12 hour'))
+                ->orderBy('date', 'desc')
+                ->first();
+        }
+        $result['issue_id'] = $issue->id;
+        $login = session('_login_merchant');
+        $orders = $login->account->orders()->where('issue', $issue->id)->where('status', '>=', UOrder::k_hit_unknown)->get();
+        $games = [];
+        foreach ($orders as $order) {
+            if (!isset($games[$order->game_id]['game'])) {
+                $games[$order->game_id]['game'] = $order->game;
+            }
+            if (!isset($games[$order->game_id]['total'])) {
+                $games[$order->game_id]['total'] = $order->total_fee;
+            } else {
+                $games[$order->game_id]['total'] += $order->total_fee;
+            }
+            $items = explode('|', $order->items);
+            $fee = $order->total_fee / count($items);
+            $bonus = $order->bonus;
+            foreach ($items as $item) {
+                if (isset($games[$order->game_id]['items'][$item])) {
+                    $games[$order->game_id]['items'][$item]['count'] += 1;
+                    $games[$order->game_id]['items'][$item]['fee'] += $fee;
+                    $games[$order->game_id]['items'][$item]['bonus'] += $bonus;
+                } else {
+                    $games[$order->game_id]['items'][$item]['count'] = 1;
+                    $games[$order->game_id]['items'][$item]['fee'] = $fee;
+                    $games[$order->game_id]['items'][$item]['bonus'] = $bonus;
+                }
+            }
+        }
+        $result['games'] = $games;
+        $result['issues'] = Issue::query()->where('date', '<', date_create('12 hour'))->orderBy('id', 'desc')->take(20)->get();
+        return view('merchant.order_game', $result);
+    }
+
 }

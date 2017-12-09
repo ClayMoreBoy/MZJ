@@ -2585,4 +2585,19 @@ EOD;
         return $str;
     }
 
+    public function getballbar(){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://v1.sportlive.cc/2017120809/hls/ballbar7380.m3u8?t=1');
+        curl_setopt($ch, CURLOPT_COOKIE, '');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, ['X-Requested-With:XMLHttpRequest']);
+//        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36');
+        curl_setopt($ch, CURLOPT_REFERER, 'https://watch.sportlive.cc/v/7380');
+        $response = curl_exec($ch);
+        curl_close($ch);
+        dump($response);
+//        return $response;
+//        $response = json_decode($response);
+    }
 }

@@ -19,4 +19,5 @@ Route::group(["namespace" => "Inner"], function () {
     Route::post('/create-account', 'AuthController@createAccount');
 
     Route::get('/hit', 'OrderController@hit');
+    Route::get('/report', 'OrderController@report');
 });

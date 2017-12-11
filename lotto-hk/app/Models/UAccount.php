@@ -39,21 +39,17 @@ class UAccount extends LModel
         return $this->hasMany(UAccountDeposit::class, 'account_id', 'id');
     }
 
-    /**
-     * 最后登录
-     * @return mixed
-     */
-    public function lastLogin()
+    public function statistics()
     {
-        return $this->login()->orderBy('updated_at', 'desc')->first();
+        return $this->hasMany(UAccountStatistic::class, 'account_id', 'id');
     }
 
-    public function lastLoginTime()
+    public function lastExpenseTime()
     {
-        $lastLogin = $this->lastLogin();
-        if (isset($lastLogin)) {
-            return $lastLogin->updated_at;
+        $order = $this->orders()->where('status', '>=', UOrder::k_status_unknown)->orderBy('created_at', 'desc')->first();
+        if (isset($order)) {
+            return substr($order->created_at, 0, 16);
         }
-        return "";
+        return '暂无消费';
     }
 }

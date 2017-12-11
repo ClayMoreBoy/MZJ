@@ -1,8 +1,6 @@
 <?php
-namespace App\Http\Controllers\Merchant;
+namespace App\Http\Controllers\Agent;
 
-use App\Models\Issue;
-use App\Models\UOrder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
@@ -17,10 +15,9 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $login = session('_login_merchant');
+        $login = session('_login_agent');
         $result['statistics'] = $login->account->statistics()->take(2)->get();
-        $result['new_account'] = $login->account->accounts()->where('created_at', '>', date_create('today'))->count();
-        return view('merchant.home', $result);
+        return view('agent.home', $result);
     }
 
 }

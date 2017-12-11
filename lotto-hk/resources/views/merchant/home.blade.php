@@ -61,14 +61,14 @@
     </div>
     <div role="main" class="ui-content">
         <div class="report">
-            @foreach($report as $issue=>$data)
-            <div class="issue">
-                <p>{{ $issue or '' }}期(<span class="{{ $data['status'] }}">{{ $data['status']=='done'?'已结束':'未结算' }}</span>)</p>
-                <p><span class="label">销售:</span><span class="money">￥{{ number_format($data['total_sell'],2) }}</span></p>
-                <p><span class="label">返奖:</span><span class="money">￥{{ number_format($data['total_bonus'],2) }}</span></p>
-                <p><span class="label">佣金:</span><span class="money">￥{{ number_format($data['commission'],2) }}</span></p>
-                <p><span class="label">利润:</span><span class="money">￥{{ number_format($data['profit'],2) }}</span></p>
-            </div>
+            @foreach($statistics as $statistic)
+                <div class="issue">
+                    <p>{{ $statistic->issue_id or '' }}期(<span class="{{ $statistic->issue->status == \App\Models\Issue::k_status_done?'done':'unknown' }}">{{ $statistic->issue->status==\App\Models\Issue::k_status_done?'已结束':'未结算' }}</span>)</p>
+                    <p><span class="label">销售:</span><span class="money">￥{{ number_format($statistic->sell_total,2) }}</span></p>
+                    <p><span class="label">返奖:</span><span class="money">￥{{ number_format($statistic->bonus_total,2) }}</span></p>
+                    <p><span class="label">佣金:</span><span class="money">￥{{ number_format($statistic->commission,2) }}</span></p>
+                    <p><span class="label">利润:</span><span class="money">￥{{ number_format($statistic->sell_total-$statistic->bonus_total-$statistic->commission,2) }}</span></p>
+                </div>
             @endforeach
         </div>
         <ul data-role="listview">
@@ -79,6 +79,9 @@
             <li><a href="/merchant/report/issue/" data-ajax="false">总销售报表</a></li>
             <li><a href="/merchant/report/agent/" data-ajax="false">代理人报表</a></li>
             <li><a href="/merchant/report/account/" data-ajax="false">用户报表</a></li>
+            <li data-role="list-divider">财务</li>
+            <li><a href="/merchant/bill/deposits/" data-ajax="false">充值记录</a></li>
+            <li><a href="/merchant/bill/withdraws/" data-ajax="false">提现记录</a></li>
             <li data-role="list-divider">用户</li>
             <li><a href="/merchant/user/search/" data-ajax="false">用户列表</a></li>
             <li><a href="/merchant/user/today/" data-ajax="false">新用户<span class="ui-li-count">{{ $new_account }}</span></a></li>

@@ -6,7 +6,7 @@ class UAgentAccount extends LModel
 {
     public function merchant()
     {
-        return $this->hasOne(UMerchantAccount::class, 'agent_id', 'id');
+        return $this->hasOne(UMerchantAccount::class, 'id', 'merchant_id');
     }
 
     public function accounts()

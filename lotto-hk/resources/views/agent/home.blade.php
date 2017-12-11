@@ -7,37 +7,97 @@
     <script src="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.js"></script>
     <script src="{{ url('/js/sha1.js') }}"></script>
     <script src="{{ url('/js/alert.js') }}"></script>
+    <style>
+        .report {
+            margin: -1em -1em 1.5em -1em;
+        }
+
+        .report > .issue {
+            display: inline-block;
+            width: 49%;
+        }
+
+        .report > .issue > p {
+            margin: .5em 0;
+            /*font-size: .8em;*/
+        }
+
+        .report > .issue > p:first-child {
+            text-align: center;
+            /*font-size: 1em;*/
+        }
+
+        .report > .issue > p > .label {
+            display:inline-block;
+            text-align: right;
+            width: 30%;
+        }
+
+        .report > .issue > p > .money {
+            display:inline-block;
+            text-align: left;
+            width: 70%;
+            color: #FB223D;
+        }
+
+        .footer {
+            padding-top: 1em;
+            text-align: center;
+        }
+
+        .done {
+            color: #2ab27b;
+        }
+
+        .unknown {
+            color: #9BA2AB;
+        }
+    </style>
 </head>
 <body>
 <div data-role="page" id="main">
     <div data-role="header">
-        <h1 class="title">代理后台登录</h1>
+        <h1 class="title">代理后台首页</h1>
     </div>
     <div role="main" class="ui-content">
-        <form method="post" action="/agent/auth/" onsubmit="return verifyForm(this);" data-ajax='false'>
-            {{ csrf_field() }}
-            <input type="hidden" name="target" value="{{ $target }}">
-            <label for="phone">手机号码:</label>
-            <input type="number" name="phone" id="phone" value="{{ $phone }}">
-            <label for="password">密码:</label>
-            <input type="password" data-clear-btn="true" name="password" id="password" value="">
-            <label>
-                <input type="checkbox" name="keep_online">保持登录状态
-            </label>
-            <input type="submit" data-theme="b" value="登录">
-        </form>
+        <div class="report">
+            @foreach($statistics as $statistic)
+                <div class="issue">
+                    <p>{{ $statistic->issue_id or '' }}期(<span class="{{ $statistic->issue->status == \App\Models\Issue::k_status_done?'done':'unknown' }}">{{ $statistic->issue->status==\App\Models\Issue::k_status_done?'已结束':'未结算' }}</span>)</p>
+                    <p><span class="label">销售:</span><span class="money">￥{{ number_format($statistic->sell_total,2) }}</span></p>
+                    <p><span class="label">返奖:</span><span class="money">￥{{ number_format($statistic->bonus_total,2) }}</span></p>
+                    <p><span class="label">佣金:</span><span class="money">￥{{ number_format($statistic->commission,2) }}</span></p>
+                    <p><span class="label">利润:</span><span class="money">￥{{ number_format($statistic->sell_total-$statistic->bonus_total-$statistic->commission,2) }}</span></p>
+                </div>
+            @endforeach
+        </div>
+        <ul data-role="listview">
+            <li data-role="list-divider">销售</li>
+            <li><a href="/agent/order/issue/" data-ajax="false">销售详情</a></li>
+            <li><a href="/agent/order/search/" data-ajax="false">订单列表</a></li>
+            <li data-role="list-divider">报表</li>
+            <li><a href="/agent/report/issue/" data-ajax="false">总销售报表</a></li>
+            <li><a href="/agent/report/account/" data-ajax="false">用户报表</a></li>
+            <li data-role="list-divider">财务</li>
+            <li><a href="/agent/deposit/accounts/" data-ajax="false">充值</a></li>
+            <li><a href="/agent/bill/deposits/" data-ajax="false">充值记录</a></li>
+            <li><a href="/agent/bill/withdraws/" data-ajax="false">提现记录</a></li>
+            <li data-role="list-divider">用户</li>
+            <li><a href="/agent/user/search/" data-ajax="false">用户列表</a></li>
+            <li><a href="/agent/user/create/" data-ajax="false">新增用户</a></li>
+            <li data-role="list-divider">设置</li>
+            <li><a href="/agent/change-password/" data-ajax="false">修改密码</a></li>
+            <li><a href="/agent/logout/" data-ajax="false">退出登录</a></li>
+        </ul>
+        <div class="footer">
+            <p>
+                我的域名:<a href="//{{ $domain }}/mobiles/" data-ajax="false" target="_blank">{{ $domain }}</a>
+            </p>
+        </div>
     </div>
 </div>
 </body>
 <script>
-    function verifyForm(form) {
-        if ($.trim(form.phone.value) === '' || $.trim(form.password.value) === '') {
-            LAlert('手机号码或者密码不能为空', 'b');
-            return false;
-        }
-        form.password.value = hex_sha1($.trim(form.password.value));
-        return true;
-    }
 </script>
 @if(isset($error))
     <script>

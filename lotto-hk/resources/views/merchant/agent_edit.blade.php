@@ -60,7 +60,7 @@
                 </div>
                 <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
                     <button disabled="disabled">微信号</button>
-                    <input type="text" id="wx_account" size="16" data-btn="phone_btn"
+                    <input type="text" id="wx_account" size="16" data-btn="wx_account_btn"
                            value="{{ request('wx_account',$agent->wx_account) }}"
                            data-wrapper-class="controlgroup-textinput ui-btn">
                     <button id="wx_account_btn" onclick="updateData('wx_account')" disabled="disabled">确定</button>

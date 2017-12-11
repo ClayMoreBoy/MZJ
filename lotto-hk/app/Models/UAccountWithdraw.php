@@ -11,17 +11,17 @@ class UAccountWithdraw extends LModel
 
     public function account()
     {
-        return $this->hasOne(UAccount::class, 'account_id', 'id');
+        return $this->hasOne(UAccount::class, 'id', 'account_id');
     }
 
     public function merchant()
     {
-        return $this->hasOne(UMerchantAccount::class, 'merchant_id', 'id');
+        return $this->hasOne(UMerchantAccount::class, 'id', 'merchant_id');
     }
 
     public function agent()
     {
-        return $this->hasOne(UAgentAccount::class, 'agent_id', 'id');
+        return $this->hasOne(UAgentAccount::class, 'id', 'agent_id');
     }
 
     public function statusCN()

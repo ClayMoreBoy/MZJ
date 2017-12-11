@@ -31,6 +31,9 @@ Route::group(["namespace" => "Merchant", 'middleware' => 'merchant_auth'], funct
     Route::get('/report/agent/', 'ReportController@agent');
     Route::get('/report/account/', 'ReportController@account');
 
+    Route::get('/bill/deposits/', 'BillController@deposits');
+    Route::get('/bill/withdraws/', 'BillController@withdraws');
+
     Route::get('/user/search/', 'UserController@search');
     Route::get('/user/today/', 'UserController@today');
 

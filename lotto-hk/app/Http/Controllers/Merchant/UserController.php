@@ -21,6 +21,10 @@ class UserController extends Controller
         $result['agents'] = $agents;
         $login = session('_login_merchant');
         $query = $login->account->accounts();
+        if ($request->has('phone')) {
+            $result['phone'] = $request->phone;
+            $query->where('phone', 'like', '%' . $request->phone . '%');
+        }
         if ($request->has('nickname')) {
             $result['nickname'] = $request->nickname;
             $query->where('nickname', 'like', '%' . $request->nickname . '%');
@@ -38,8 +42,11 @@ class UserController extends Controller
             $query->orderBy($request->sort_at, $request->sort_rule);
         }
         $accounts = $query->paginate(20);
-        if (isset($account)) {
-            $accounts->appends(['account_id' => $account->id]);
+        if (isset($result['phone'])) {
+            $accounts->appends(['phone' => $result['phone']]);
+        }
+        if (isset($result['nickname'])) {
+            $accounts->appends(['nickname' => $result['nickname']]);
         }
         if (isset($agent)) {
             $accounts->appends(['agent_id' => $agent->id]);

@@ -36,7 +36,7 @@ class AuthController extends Controller
                 $result['error'] = '账号或者密码不能为空!';
             } else {
                 $account = UAccount::query()->where("phone", $phone)->first();
-                if (empty($account) || $account->password != sha1($account->salt . $password)) {
+                if (empty($account) || $account->password != sha1($password . $account->salt)) {
                     $result['error'] = '账号或者密码错误!';
                 } else {
                     $token = UAccountLogin::generateToken();
@@ -90,7 +90,7 @@ class AuthController extends Controller
                 $result['error'] = '密码不能为空！';
             } else {
                 if ($login->account->change_password == 0) {
-                    $login->account->password = sha1($login->account->salt . $password);
+                    $login->account->password = sha1($password . $login->account->salt);
                     $login->account->change_password = 1;
                     if ($login->account->save()) {
                         return redirect($target);
@@ -101,10 +101,10 @@ class AuthController extends Controller
                     $password_old = $request->input('password_old');
                     if (empty($password_old)) {
                         $result['error'] = '旧密码不能为空！';
-                    } elseif ($login->account->password != sha1($login->account->salt . $password_old)) {
+                    } elseif ($login->account->password != sha1($password_old . $login->account->salt)) {
                         $result['error'] = '密码错误';
                     } else {
-                        $login->account->password = sha1($login->account->salt . $password);
+                        $login->account->password = sha1($password . $login->account->salt);
                         if ($login->account->save()) {
                             return redirect($target);
                         } else {

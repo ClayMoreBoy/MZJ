@@ -20,25 +20,19 @@ class MerchantDomainVerify
     {
         $login = session('_login_merchant');
         $rs = $this->parse($request);
-        $domain_old = parse_url($request->fullUrl(), PHP_URL_HOST);
-        $scheme = parse_url($request->fullUrl(), PHP_URL_SCHEME);
-        $path = parse_url($request->fullUrl(), PHP_URL_PATH);
+//        $scheme = parse_url($request->fullUrl(), PHP_URL_SCHEME);
+//        $path = parse_url($request->fullUrl(), PHP_URL_PATH);
         if (isset($login) && isset($login->account)) {
             View::share('account', $login->account);
+            $domain = $login->account->domain . '.' . $rs['domain'];
+            View::share('domain', $domain);
             if (isset($rs['merchant'])) {
                 if ($login->account->id == $rs['merchant']->id) {
-                    View::share('domain', $login->account->domain . '.' . $rs['domain']);
                     return $next($request);
                 }
             }
-
-            $domain = $rs['domain'];
-            if ($domain_old == $domain) {
-                View::share('domain', $domain);
-                return $next($request);
-            } else {
-                return redirect($scheme . '://' . $login->account->domain . '.' . $rs['domain'] . $path);
-            }
+            return $next($request);
+//            return redirect($scheme . '://' . $domain . $path);
         } else {
             return $next($request);
         }

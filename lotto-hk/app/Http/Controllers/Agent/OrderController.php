@@ -108,7 +108,7 @@ class OrderController extends Controller
             }
         }
         $result['games'] = $games;
-        $result['issues'] = Issue::query()->where('date', '<', date_create('12 hour'))->orderBy('id', 'desc')->take(20)->get();
+        $result['issues'] = Issue::query()->where('date', '<', date_create('36 hour'))->orderBy('id', 'desc')->take(20)->get();
         return view('agent.order_game', $result);
     }
 

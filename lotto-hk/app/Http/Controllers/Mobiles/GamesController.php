@@ -24,7 +24,7 @@ class GamesController extends BaseController
     {
         $login = session('_login');
         $game = $login->account->merchant->games()->where('game_id', UGame::k_type_te_solo)->first();
-        $issue = Issue::query()->where('status', '0')->where('date', '<', date_create('36 hour'))->orderBy('date', 'desc')->first();
+        $issue = Issue::currentIssue();
         return view('mobiles.tz_te', ['issue' => $issue, 'game' => $game, 'num_attr' => $this->num_attr, 'zodiacs_ball' => $this->zodiacs_ball]);
     }
 
@@ -40,7 +40,7 @@ class GamesController extends BaseController
             }
             $issue = $request->input('issue', 0);
             $issue = Issue::query()->find($issue);
-            if (!isset($issue) || $issue->status == 2) {
+            if (!isset($issue) || $issue->status > 0) {
                 return response()->json(['code' => 401, 'message' => '无效的期数！']);
             }
             if (strtotime($issue->date) < date_create('+10 min')->getTimestamp()) {

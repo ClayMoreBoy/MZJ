@@ -49,10 +49,7 @@ class LottoController extends BaseController
         }
 //        dump($this->num_attr);
 
-        $issue = Issue::query()->where('status', '1')->orderBy('date', 'desc')->first();
-        if (!isset($issue)) {
-            $issue = Issue::query()->where('status', '0')->orderBy('date', 'desc')->first();
-        }
+        $issue = Issue::currentIssue();
         $issues = Issue::query()->where('status', '2')->take(20)->orderBy('date', 'desc')->get();
 //        dump($issues);
         return view('lotto-hk', ['curr_issue' => $issue,'issues' => $issues, 'num_attr' => $this->num_attr]);

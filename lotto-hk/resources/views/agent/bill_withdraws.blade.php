@@ -5,6 +5,7 @@
     <link href="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.css" rel="stylesheet">
     <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.js"></script>
+    <script src="{{ url('/js/alert.js') }}"></script>
     <style>
         .ui-bar {
             padding: .4em .4em;
@@ -14,6 +15,32 @@
             padding: .3em;
             margin: 0;
             float: right;
+        }
+
+        .line {
+            height: 2.4em;
+            line-height: 2.4em;
+        }
+
+        .waiting {
+            color: #9BA2AB;
+        }
+
+        .rejected {
+            color: #FB223D;
+        }
+
+        .succeed {
+            color: #1fc26b;
+        }
+
+        .canceled {
+            color: #9BA2AB;
+        }
+
+        .ui-btn-process, .ui-btn-process:hover, .ui-btn-process:active {
+            background: none;
+            border: 0;
         }
     </style>
 </head>
@@ -45,33 +72,59 @@
                         <div class="ui-block-a">
                             <div class="ui-bar ui-bar-b">
                                 <h3 style="line-height: 2.4em;height: 2.4em;">用户：{{ $filter_user->nickname }}</h3>
-                                <a href="/agent/bill/withdraws/" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline"></a>
+                                <a href="/agent/bill/withdraws/"
+                                   class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline"></a>
                             </div>
                         </div>
                     </div>
                 @endif
-                <div class="ui-grid-b">
+                <div class="ui-grid-c">
                     <div class="ui-block-a">
                         <div class="ui-bar ui-bar-a">用户</div>
                     </div>
-                    <div class="ui-block-c">
+                    <div class="ui-block-b">
                         <div class="ui-bar ui-bar-a">金额</div>
                     </div>
                     <div class="ui-block-c">
                         <div class="ui-bar ui-bar-a">时间</div>
                     </div>
+                    <div class="ui-block-d">
+                        <div class="ui-bar ui-bar-a">状态</div>
+                    </div>
                 </div>
                 @foreach($withdraws as $withdraw)
-                    <div class="ui-grid-b">
+                    <div class="ui-grid-c">
                         <div class="ui-block-a">
-                            <div class="ui-bar ui-bar-a">{{ $withdraw->account->nickname }}</div>
+                            <div class="ui-bar ui-bar-a"><span class="line">{{ $withdraw->account->nickname }}</span>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div class="ui-bar ui-bar-a"><span class="line">{{ number_format($withdraw->fee,2) }}</span>
+                            </div>
                         </div>
                         <div class="ui-block-c">
-                            <div class="ui-bar ui-bar-a">{{ number_format($withdraw->fee,2) }}</div>
+                            <div class="ui-bar ui-bar-a"><span
+                                        class="line">{{ substr($withdraw->updated_at,5,11) }}</span></div>
                         </div>
-                        <div class="ui-block-c">
-                            <div class="ui-bar ui-bar-a">{{ substr($withdraw->updated_at,5,11) }}</div>
+                        <div class="ui-block-d">
+                            <div class="ui-bar ui-bar-a">
+                                <span class="line {{ $withdraw->statusCSS() }}">{{ $withdraw->statusCN() }}</span>
+                                @if($withdraw->status == \App\Models\UAccountWithdraw::k_status_waiting)
+                                    <a href="#popup_process_{{ $withdraw->id }}" data-transition="pop" data-rel="popup"
+                                       class="ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext ui-btn-process"></a>
+                                @endif
+                            </div>
                         </div>
+                    </div>
+                    <div data-role="popup" id="popup_process_{{ $withdraw->id }}" data-theme="none">
+                        <ul data-role="listview">
+                            <li data-icon="check">
+                                <a data-rel="back" onclick="processWithdraw('{{ $withdraw->id }}','done')">转账完成</a>
+                            </li>
+                            <li data-icon="delete">
+                                <a data-rel="back" onclick="processWithdraw('{{ $withdraw->id }}','reject')">拒绝提现</a>
+                            </li>
+                        </ul>
                     </div>
                 @endforeach
             </ul>
@@ -92,4 +145,24 @@
     </div>
 </div>
 </body>
+<script>
+    function processWithdraw(id, action) {
+        $.mobile.loading("show");
+        $.post('/agent/process/withdraw/', {
+            _token: '{{ csrf_token() }}',
+            id: id,
+            action: action
+        }, function (data) {
+            $.mobile.loading("hide");
+            if (data.code == 0) {
+                LAlert('操作成功', 'a');
+                location.reload();
+            } else if (data.code == 403) {
+                location.reload();
+            } else {
+                LAlert(data.message, 'b');
+            }
+        });
+    }
+</script>
 </html>

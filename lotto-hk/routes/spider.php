@@ -24,7 +24,5 @@ Route::group(["namespace" => "Spider"], function () {
     Route::get('/column', 'SpiderController@column');
     Route::get('/article_list', 'SpiderController@article_list');
     Route::get('/article_get', 'SpiderController@article_get');
-
-    Route::get('/getballbar', 'SpiderController@getballbar');
 });
 

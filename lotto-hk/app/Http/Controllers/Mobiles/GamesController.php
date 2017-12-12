@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Mobiles;
 
 use App\Models\Issue;
-use App\Models\LModel;
 use App\Models\UAccount;
 use App\Models\UAccountBill;
 use App\Models\UOrder;
@@ -113,8 +112,23 @@ class GamesController extends BaseController
         }
     }
 
-    public function ping()
+    public function all(Request $request)
     {
-        return view('mobiles.tz_ping');
+        return view('mobiles.tz_all');
+    }
+
+    public function allPost(Request $request)
+    {
+
+    }
+
+    public function allZodiac(Request $request)
+    {
+        return view('mobiles.tz_all_zodiac');
+    }
+
+    public function allZodiacPost(Request $request)
+    {
+
     }
 }

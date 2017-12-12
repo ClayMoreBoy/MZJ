@@ -44,8 +44,4 @@ class OrdersController extends BaseController
         return view('mobiles.order_history', ['issues' => $result, 'page_orders' => $orders]);
     }
 
-    public function ping()
-    {
-        return view('mobiles.tz_ping');
-    }
 }

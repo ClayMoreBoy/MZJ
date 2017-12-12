@@ -78,7 +78,7 @@
 
             <li data-role="list-divider"><h3>投注、玩法</h3></li>
             @if (isset($merchant) && $merchant->status == 1)
-                @foreach($merchant->games as $item)
+                @foreach($merchant->games()->where('on_off',1)->get() as $item)
                     @if(starts_with(request()->path(),'mobiles/games/'.$item->path))
                         <li data-icon="false" data-theme="b">{{ $item->name }}</li>
                     @else

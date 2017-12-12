@@ -33,4 +33,10 @@ Route::group(["namespace" => "Agent", 'middleware' => 'agent_auth'], function ()
     Route::any('/deposit/{id}/', 'FinanceController@deposit');
     Route::get('/bill/deposits/', 'FinanceController@deposits');
     Route::get('/bill/withdraws/', 'FinanceController@withdraws');
+
+    Route::get('/order/search/', 'OrderController@search');
+    Route::get('/order/issue/', 'OrderController@issue');
+
+    Route::get('/report/issue/', 'ReportController@issue');
+    Route::get('/report/account/', 'ReportController@account');
 });

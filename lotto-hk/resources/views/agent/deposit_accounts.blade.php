@@ -18,10 +18,10 @@
     </div>
     <div role="main" class="ui-content">
         <div style="margin:-1em -.5em;">
-            <ul data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="用户昵称"
+            <ul data-role="listview" data-filter="true" data-filter-reveal="false" data-filter-placeholder="用户昵称"
                 data-inset="true">
                 @foreach($account->accounts as $user)
-                    <li><a href="/agent/deposit/{{ $user->id }}/" data-ajax="false">{{ $user->nickname }}</a></li>
+                    <li><a href="/agent/deposit/{{ $user->id }}/" data-ajax="false">{{ $user->nickname }}({{ $user->phone }})</a></li>
                 @endforeach
             </ul>
         </div>

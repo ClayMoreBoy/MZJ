@@ -21,7 +21,7 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             if ($order->issueO->status == Issue::k_status_done) {
                 //特码
-                if ($order->game_id == UGame::k_type_te) {
+                if ($order->game_id == UGame::k_type_te_solo) {
                     DB::beginTransaction();
                     $num = $order->issueO->num7;
                     //命中
@@ -62,7 +62,7 @@ class OrderController extends Controller
                     }
                 }
                 //平特
-                if ($order->game_id == UGame::k_type_ping) {
+                if ($order->game_id == UGame::k_type_all_solo) {
 
                 }
             }

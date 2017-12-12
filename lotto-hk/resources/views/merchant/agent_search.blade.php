@@ -12,6 +12,8 @@
         <h1 class="title">代理人列表</h1>
         <a href="/merchant/" data-ajax="false"
            class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-back ui-nodisc-icon ui-alt-icon ui-btn-left"></a>
+        <a href="/merchant/agent/create/" data-ajax="false"
+           class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-plus ui-nodisc-icon ui-alt-icon ui-btn-right"></a>
     </div>
     <div role="main" class="ui-content">
         <div style="margin:-1em -.5em;">

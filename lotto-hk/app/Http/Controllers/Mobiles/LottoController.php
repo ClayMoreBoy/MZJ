@@ -155,15 +155,4 @@ class LottoController extends BaseController
         $columns = Column::query()->where('id', 6)->orWhere('id', 7)->get();
         return view('mobiles.columns', ['columns' => $columns]);
     }
-
-    public function tz_te()
-    {
-        $issue = Issue::query()->where('status', '0')->orderBy('date', 'desc')->first();
-        return view('mobiles.tz_te', ['issue' => $issue, 'num_attr' => $this->num_attr, 'zodiacs_ball' => $this->zodiacs_ball]);
-    }
-
-    public function tz_ping()
-    {
-        return view('mobiles.tz_ping');
-    }
 }

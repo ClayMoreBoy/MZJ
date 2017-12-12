@@ -23,7 +23,7 @@
 <div data-role="page" id="main">
     <div data-role="header">
         <h1 class="title">销售统计</h1>
-        <a href="/merchant/" data-ajax="false"
+        <a href="/agent/" data-ajax="false"
            class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-back ui-nodisc-icon ui-alt-icon ui-btn-left"></a>
         <a href="#conditions_panel"
            class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bullets ui-nodisc-icon ui-alt-icon ui-btn-right"></a>

@@ -11,17 +11,8 @@
 |
 */
 
-Route::get('/', function (){
+Route::get('/', function () {
     return redirect('/mobiles/');
-});
-
-Route::group(["namespace" => "Foreground"], function () {
-    Route::get('/', 'LottoController@index');
-    Route::get('/home/', 'LottoController@home');
-
-    Route::get('/mobiles/', 'LottoController@mobiles_index');
-    Route::get('/mobiles/tz_te/', 'LottoController@mobiles_index');
-    Route::get('/mobiles/tz_ping/', 'LottoController@mobiles_index');
 });
 
 Route::group(["namespace" => "Mobiles"], function () {
@@ -47,12 +38,15 @@ Route::group(["namespace" => "Mobiles", 'middleware' => 'auth'], function () {
     Route::get('/mobiles/order/order_history/', 'OrdersController@order_history');
 });
 
+//玩法
 Route::group(["namespace" => "Mobiles", 'middleware' => 'auth'], function () {
     Route::get('/mobiles/games/te/', 'GamesController@te');
-    Route::get('/mobiles/games/ping/', 'GamesController@ping');
+    Route::get('/mobiles/games/all/', 'GamesController@all');
+    Route::get('/mobiles/games/all-zodiac/', 'GamesController@allZodiac');
 });
 
 Route::group(["namespace" => "Mobiles", 'middleware' => 'auth_api'], function () {
     Route::post('/mobiles/games/te/post/', 'GamesController@tePost');
-    Route::post('/mobiles/games/ping/post/', 'GamesController@pingPost');
+    Route::post('/mobiles/games/all/post/', 'GamesController@allPost');
+    Route::post('/mobiles/games/all-zodiac/post/', 'GamesController@allZodiacPost');
 });

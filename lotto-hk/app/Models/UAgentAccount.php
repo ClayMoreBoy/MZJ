@@ -14,6 +14,11 @@ class UAgentAccount extends LModel
         return $this->hasMany(UAccount::class, 'agent_id', 'id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(UOrder::class, 'agent_id', 'id');
+    }
+
     public function bills()
     {
         return $this->hasMany(UAccountBill::class, 'agent_id', 'id');

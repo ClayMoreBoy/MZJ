@@ -81,7 +81,7 @@
             <li data-role="list-divider">财务</li>
             <li><a href="/agent/deposit/accounts/" data-ajax="false">充值</a></li>
             <li><a href="/agent/bill/deposits/" data-ajax="false">充值记录</a></li>
-            <li><a href="/agent/bill/withdraws/" data-ajax="false">提现记录</a></li>
+            <li><a href="/agent/bill/withdraws/" data-ajax="false">提现记录<span class="ui-li-count">{{ $withdraws }}</span></a></li>
             <li data-role="list-divider">用户</li>
             <li><a href="/agent/user/search/" data-ajax="false">用户列表</a></li>
             <li><a href="/agent/user/create/" data-ajax="false">新增用户</a></li>

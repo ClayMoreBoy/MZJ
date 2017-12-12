@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mobiles;
 use App\Models\Issue;
 use App\Models\UAccount;
 use App\Models\UAccountBill;
+use App\Models\UGame;
 use App\Models\UOrder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -22,8 +23,8 @@ class GamesController extends BaseController
     public function te(Request $request)
     {
         $login = session('_login');
-        $game = $login->account->merchant->games()->where('id', 100)->first();
-        $issue = Issue::query()->where('status', '0')->orderBy('date', 'desc')->first();
+        $game = $login->account->merchant->games()->where('game_id', UGame::k_type_te_solo)->first();
+        $issue = Issue::query()->where('status', '0')->where('date', '<', date_create('36 hour'))->orderBy('date', 'desc')->first();
         return view('mobiles.tz_te', ['issue' => $issue, 'game' => $game, 'num_attr' => $this->num_attr, 'zodiacs_ball' => $this->zodiacs_ball]);
     }
 

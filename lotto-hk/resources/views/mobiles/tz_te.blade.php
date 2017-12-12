@@ -365,7 +365,7 @@
             var balls_str = balls.join('|');
             var token = '{{ csrf_token() }}';
             var issue = '{{ $issue->id }}';
-            var gameId = '{{ $game->id }}';
+            var gameId = '{{ $game->game_id }}';
             $.mobile.loading("show");
             $.post('/mobiles/games/te/post/', {
                 'total_fee': capital.toFixed(2),

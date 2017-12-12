@@ -141,7 +141,7 @@
             <div class="nav-agent">
                 <p>注册、充值请联系代理人</p>
                 <p>代理人微信号：<strong class="balance">{{ $agent->wx_account }}</strong></p>
-                <img src="{{ $agent->wx_qr }}" width="100%">
+                <img src="{{ $agent->wx_qr }}" width="90%">
             </div>
         @endif
     </div>

@@ -101,6 +101,8 @@
         <h1 class="title">已结算订单</h1>
         <a href="#" data-rel="back"
            class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-back ui-nodisc-icon ui-alt-icon ui-btn-left"></a>
+        <a href="/mobiles/" data-ajax="false"
+           class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-home ui-nodisc-icon ui-alt-icon ui-btn-right"></a>
     </div>
     <div role="main" class="ui-content">
         <div style="margin:-1em -.5em;">

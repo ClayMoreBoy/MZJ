@@ -18,7 +18,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $login = session('_login_merchant');
-        $result['statistics'] = $login->account->statistics()->take(2)->get();
+        $result['statistics'] = $login->account->statistics()->orderBy('issue_id', 'desc')->take(2)->get();
         $result['new_account'] = $login->account->accounts()->where('created_at', '>', date_create('today'))->count();
         return view('merchant.home', $result);
     }

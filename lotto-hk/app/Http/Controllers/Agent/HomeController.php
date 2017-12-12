@@ -17,7 +17,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $login = session('_login_agent');
-        $result['statistics'] = $login->account->statistics()->take(2)->get();
+        $result['statistics'] = $login->account->statistics()->orderBy('issue_id', 'desc')->take(2)->get();
         $result['withdraws'] = $login->account->withdraws()->where('status', UAccountWithdraw::k_status_waiting)->count();
         return view('agent.home', $result);
     }

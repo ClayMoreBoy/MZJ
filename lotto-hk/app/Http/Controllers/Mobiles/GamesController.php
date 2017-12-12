@@ -47,7 +47,7 @@ class GamesController extends BaseController
                 return response()->json(['code' => 401, 'message' => '请在开奖前10分钟投注！']);
             }
             $gameId = $request->input('gameId', 0);
-            $game = $account->merchant->games()->where('id', $gameId)->first();
+            $game = $account->merchant->games()->where('game_id', $gameId)->first();
             if (!isset($game)) {
                 return response()->json(['code' => 401, 'message' => '无效的玩法！']);
             }

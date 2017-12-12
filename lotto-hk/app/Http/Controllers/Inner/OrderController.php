@@ -76,7 +76,7 @@ class OrderController extends Controller
         if ($issue == 0) {
             $issues = Issue::query()
                 ->where('status', '<', Issue::k_status_done)
-//                ->where('date', '<', date_create('36 hour'))
+                ->where('date', '<', date_create('36 hour'))
                 ->orderBy('date', 'desc')
                 ->take(1)->get();
         } elseif ($issue == 1) {
@@ -174,5 +174,6 @@ class OrderController extends Controller
                 $uas->save();
             }
         }
+        return response()->json(["code" => 0]);
     }
 }

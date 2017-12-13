@@ -29,20 +29,7 @@ class UDomainVerify
             View::share('account', $accountDB);
             View::share('merchant', $login->account->merchant()->first());
             View::share('agent', $login->account->agent()->first());
-            if (isset($rs['merchant']) && isset($rs['agent'])) {
-                if ($login->account->merchant->id == $rs['merchant']->id && $login->account->agent->id == $rs['agent']->id) {
-                    return $next($request);
-                }
-            }
-            $domain_old = parse_url($request->fullUrl(), PHP_URL_HOST);
-            $scheme = parse_url($request->fullUrl(), PHP_URL_SCHEME);
-            $path = parse_url($request->fullUrl(), PHP_URL_PATH);
-            $domain = $login->account->agent->domain . '.' . $login->account->merchant->domain . '.' . $rs['domain'];
-            if ($domain_old == $domain) {
-                return $next($request);
-            } else {
-                return redirect($scheme . '://' . $login->account->agent->domain . '.' . $login->account->merchant->domain . '.' . $rs['domain'] . $path);
-            }
+            return $next($request);
         } else {
             if (isset($rs['merchant']) && isset($rs['agent'])) {
                 View::share('merchant', $rs['merchant']);

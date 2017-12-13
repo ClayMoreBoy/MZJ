@@ -122,48 +122,59 @@ class AuthController extends Controller
         return back()->withCookies([$c]);
     }
 
-    public function withdraw(Request $request)
+    public function edit(Request $request)
     {
-        $login = session('_login_agent');
-        $result = [];
-        if ($request->isMethod('post')) {
-            if (!$request->has('fee')) {
-                $result['error'] = '提现金额不能为空';
-            } elseif ($request->fee <= 0 || $request->fee > $login->account->balance) {
-                $result['error'] = '无效的提现金额';
-            } else {
-                $withdraw = new UAccountWithdraw();
-                $withdraw->account_id = $login->account->id;
-                $withdraw->merchant_id = $login->account->merchant_id;
-                $withdraw->agent_id = $login->account->agent_id;
-                $withdraw->fee = $request->fee;
-                $withdraw->status = UAccountWithdraw::k_status_waiting;
-                DB::beginTransaction();
-                if ($withdraw->save()) {
-                    $login->account->balance = $login->account->balance - $request->fee;
-                    if ($login->account->save()) {
-                        View::share('account', $login->account);
-                        DB::commit();
-                    } else {
-                        $result['error'] = '服务器异常，请稍后重试';
-                        DB::rollBack();
-                    }
-                } else {
-                    $result['error'] = '服务器异常，请稍后重试';
-                    DB::rollBack();
-                }
-            }
-        }
-        $withdraws = $login->account->withdraws()->orderBy('created_at', 'desc')->paginate(20);
-        $result['withdraws'] = $withdraws;
-        return view('agent.withdraw', $result);
+        return view('agent.agent_edit');
     }
 
-    public function bills(Request $request)
+    public function update(Request $request)
     {
         $login = session('_login_agent');
-        $bills = $login->account->bills()->orderBy('created_at', 'desc')->paginate(20);
-        return view('agent.bills', ['bills' => $bills]);
+        $agent = $login->account;
+        if ($request->has('key') && $request->has('value')) {
+            switch ($request->input('key', '')) {
+                case 'phone': {
+                    if (!preg_match('/^1[34578]\d{9}$/', $request->value)) {
+                        return json_encode(['code' => 401, 'message' => '无效的手机号码']);
+                    }
+                    $agent->phone = $request->value;
+                    if ($agent->save()) {
+                        return response()->json(['code' => 0, 'message' => 'OK']);
+                    } else {
+                        return json_encode(['code' => 500, 'message' => '服务器异常']);
+                    }
+                }
+                case 'name': {
+                    if (strlen($request->value) < 2) {
+                        return response()->json(['code' => 401, 'message' => '名称不得少于2位']);
+                    }
+                    $agent->name = $request->value;
+                    if ($agent->save()) {
+                        return response()->json(['code' => 0, 'message' => 'OK']);
+                    } else {
+                        return response()->json(['code' => 500, 'message' => '服务器异常']);
+                    }
+                }
+                case 'wx_account': {
+                    $agent->wx_account = $request->value;
+                    if ($agent->save()) {
+                        return response()->json(['code' => 0, 'message' => 'OK']);
+                    } else {
+                        return response()->json(['code' => 500, 'message' => '服务器异常']);
+                    }
+                }
+                case 'wx_qr': {
+                    $agent->wx_qr = $request->value;
+                    if ($agent->save()) {
+                        return response()->json(['code' => 0, 'message' => 'OK']);
+                    } else {
+                        return response()->json(['code' => 500, 'message' => '服务器异常']);
+                    }
+                }
+            }
+        } else {
+            return response()->json(['code' => 401, 'message' => '参数错误']);
+        }
     }
 
     /**

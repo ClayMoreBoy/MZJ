@@ -60,9 +60,56 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
+                } //平特
+                elseif ($order->game_id == UGame::k_type_all_solo) {
+                    DB::beginTransaction();
+                    $nums = [
+                        $order->issueO->num1,
+                        $order->issueO->num2,
+                        $order->issueO->num3,
+                        $order->issueO->num4,
+                        $order->issueO->num5,
+                        $order->issueO->num6,
+                        $order->issueO->num7
+                    ];
+                    //命中
+                    if (!empty(array_intersect($nums, explode('|', $order->items)))) {
+                        $order->status = UOrder::k_status_done;
+                        $order->hit = UOrder::k_hit_win;
+                        $order->hit_item = $num;
+                        if ($order->save()) {
+                            $order->account->balance += $order->bonus;
+                            if ($order->account->save()) {
+                                $sell = new UAccountBill();
+                                $sell->account_id = $order->account_id;
+                                $sell->merchant_id = $order->merchant_id;
+                                $sell->agent_id = $order->agent_id;
+                                $sell->fee = $order->bonus;
+                                $sell->type = UAccountBill::k_type_bonus;
+                                $sell->tid = $order->id;
+                                $sell->describe = '返奖';
+                                if ($sell->save()) {
+                                    DB::commit();
+                                } else {
+                                    DB::rollBack();
+                                }
+                            } else {
+                                DB::rollBack();
+                            }
+                        } else {
+                            DB::rollBack();
+                        }
+                    } else {//未命中
+                        $order->status = UOrder::k_status_done;
+                        $order->hit = UOrder::k_hit_lose;
+                        if ($order->save()) {
+                            DB::commit();
+                        } else {
+                            DB::rollBack();
+                        }
+                    }
                 }
-                //平特
-                if ($order->game_id == UGame::k_type_all_solo) {
+                elseif ($order->game_id == UGame::k_type_all_zodiac) {
 
                 }
             }

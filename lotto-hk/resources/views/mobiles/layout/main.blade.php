@@ -79,10 +79,11 @@
             <li data-role="list-divider"><h3>投注、玩法</h3></li>
             @if (isset($merchant) && $merchant->status == 1)
                 @foreach($merchant->games()->where('on_off',1)->get() as $item)
-                    @if(starts_with(request()->path(),'mobiles/games/'.$item->path))
+                    @if(str_finish(request()->path(),'/')=='mobiles/games/'.$item->path.'/')
                         <li data-icon="false" data-theme="b">{{ $item->name }}</li>
                     @else
-                        <li><a href="{{ '/mobiles/games/'.$item->path.'/' }}" data-ajax="false">{{ $item->name }}</a>
+                        <li>
+                            <a href="{{ '/mobiles/games/'.$item->path.'/' }}" data-ajax="false">{{ $item->name }}</a>
                         </li>
                     @endif
                 @endforeach
@@ -130,7 +131,8 @@
                 </li>
                 <li data-role="list-divider"><h3>操作</h3></li>
                 <li>
-                    <a href="/mobiles/change-password/?target={{ urlencode(url()->current()) }}" data-ajax="false">修改密码</a>
+                    <a href="/mobiles/change-password/?target={{ urlencode(url()->current()) }}"
+                       data-ajax="false">修改密码</a>
                 </li>
                 <li>
                     <a href="#popupLogout" data-rel="popup" data-position-to="window" data-transition="pop">退出登录</a>

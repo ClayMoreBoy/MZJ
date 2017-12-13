@@ -114,7 +114,7 @@
         });
     }
     $('input').each(function (i, input) {
-        $(input).bind('change', function (e) {
+        $(input).bind('input propertychange', function (e) {
             if ($(e.target).attr('data-btn')) {
                 $('#' + $(e.target).attr('data-btn')).removeAttr('disabled');
             }

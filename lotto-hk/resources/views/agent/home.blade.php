@@ -79,15 +79,16 @@
             <li><a href="/agent/report/issue/" data-ajax="false">总销售报表</a></li>
             <li><a href="/agent/report/account/" data-ajax="false">用户报表</a></li>
             <li data-role="list-divider">财务</li>
-            <li><a href="/agent/deposit/accounts/" data-ajax="false">充值</a></li>
+            <li data-icon="shop"><a href="/agent/deposit/accounts/" data-ajax="false">充值</a></li>
             <li><a href="/agent/bill/deposits/" data-ajax="false">充值记录</a></li>
             <li><a href="/agent/bill/withdraws/" data-ajax="false">提现记录<span class="ui-li-count">{{ $withdraws }}</span></a></li>
             <li data-role="list-divider">用户</li>
             <li><a href="/agent/user/search/" data-ajax="false">用户列表</a></li>
-            <li><a href="/agent/user/create/" data-ajax="false">新增用户</a></li>
+            <li data-icon="plus"><a href="/agent/user/create/" data-ajax="false">新增用户</a></li>
             <li data-role="list-divider">设置</li>
-            <li><a href="/agent/change-password/" data-ajax="false">修改密码</a></li>
-            <li><a href="/agent/logout/" data-ajax="false">退出登录</a></li>
+            <li data-icon="edit"><a href="/agent/profile/edit/" data-ajax="false">修改资料</a></li>
+            <li data-icon="lock"><a href="/agent/change-password/" data-ajax="false">修改密码</a></li>
+            <li data-icon="forward"><a href="/agent/logout/" data-ajax="false">退出登录</a></li>
         </ul>
         <div class="footer">
             <p>

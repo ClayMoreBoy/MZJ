@@ -16,11 +16,13 @@ Route::group(["namespace" => "Agent", 'middleware' => 'agent_auth'], function ()
     Route::get('/', 'HomeController@index');
     Route::any('/change-password/', 'AuthController@changePassword');
     Route::any('/logout/', 'AuthController@logout');
+    Route::any('/profile/edit/', 'AuthController@edit');
 });
 
 Route::group(["namespace" => "Agent", 'middleware' => 'agent_auth_api'], function () {
     Route::post('/user/update/', 'UserController@update');
     Route::post('/process/withdraw/', 'FinanceController@processWithdraw');
+    Route::any('/profile/update/', 'AuthController@update');
 });
 
 Route::group(["namespace" => "Agent", 'middleware' => 'agent_auth'], function () {

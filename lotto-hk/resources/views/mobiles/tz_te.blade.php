@@ -5,68 +5,73 @@
 @endsection
 
 @section('title')
-    {{ $game->name }}-{{ $issue->id }}期
+    @if(isset($game))
+        {{ $game->name }}-{{ $issue->id }}期
+    @else
+        该玩法暂未开通
+    @endif
 @endsection
 
 @section('content')
-    <div class="tz-num-list zodiac">
-        <div class="select">
-            <fieldset data-role="controlgroup">
-                <select name="select-zodiacs" id="select-zodiacs" data-native-menu="false" multiple="multiple">
-                    <option>选择生肖</option>
-                    <optgroup label="家禽">
-                        <option value="牛">牛</option>
-                        <option value="马">马</option>
-                        <option value="羊">羊</option>
-                        <option value="鸡">鸡</option>
-                        <option value="狗">狗</option>
-                        <option value="猪">猪</option>
-                    </optgroup>
-                    <optgroup label="野兽">
-                        <option value="鼠">鼠</option>
-                        <option value="虎">虎</option>
-                        <option value="兔">兔</option>
-                        <option value="龙">龙</option>
-                        <option value="蛇">蛇</option>
-                        <option value="猴">猴</option>
-                    </optgroup>
-                </select>
-                <select name="select-colors" id="select-colors" data-native-menu="false" multiple="multiple">
-                    <option>选择波色</option>
-                    <option value="red">红</option>
-                    <option value="blue">蓝</option>
-                    <option value="green">绿</option>
-                </select>
-                <select name="select-uo" id="select-uo" data-native-menu="false" multiple="multiple">
-                    <option>选择大小</option>
-                    <option value="u">大</option>
-                    <option value="o">小</option>
-                </select>
-                <select name="select-ds" id="select-ds" data-native-menu="false" multiple="multiple">
-                    <option>选择单双</option>
-                    <option value="d">单</option>
-                    <option value="s">双</option>
-                </select>
-                <select name="select-ws" id="select-ws" data-native-menu="false" multiple="multiple">
-                    <option>选择尾数</option>
-                    <option value="0">0尾</option>
-                    <option value="1">1尾</option>
-                    <option value="2">2尾</option>
-                    <option value="3">3尾</option>
-                    <option value="4">4尾</option>
-                    <option value="5">5尾</option>
-                    <option value="6">6尾</option>
-                    <option value="7">7尾</option>
-                    <option value="8">8尾</option>
-                    <option value="9">9尾</option>
-                </select>
-            </fieldset>
-        </div>
-        @foreach($zodiacs_ball as $zodiac=>$nums)
-            <ul class="{{ $loop->first?'first':'' }}">
-                <li class="issue">{{ $zodiac }}</li>
-                @foreach($nums as $num)
-                    <li class="tz">
+    @if(isset($game))
+        <div class="tz-num-list zodiac">
+            <div class="select">
+                <fieldset data-role="controlgroup">
+                    <select name="select-zodiacs" id="select-zodiacs" data-native-menu="false" multiple="multiple">
+                        <option>选择生肖</option>
+                        <optgroup label="家禽">
+                            <option value="牛">牛</option>
+                            <option value="马">马</option>
+                            <option value="羊">羊</option>
+                            <option value="鸡">鸡</option>
+                            <option value="狗">狗</option>
+                            <option value="猪">猪</option>
+                        </optgroup>
+                        <optgroup label="野兽">
+                            <option value="鼠">鼠</option>
+                            <option value="虎">虎</option>
+                            <option value="兔">兔</option>
+                            <option value="龙">龙</option>
+                            <option value="蛇">蛇</option>
+                            <option value="猴">猴</option>
+                        </optgroup>
+                    </select>
+                    <select name="select-colors" id="select-colors" data-native-menu="false" multiple="multiple">
+                        <option>选择波色</option>
+                        <option value="red">红</option>
+                        <option value="blue">蓝</option>
+                        <option value="green">绿</option>
+                    </select>
+                    <select name="select-uo" id="select-uo" data-native-menu="false" multiple="multiple">
+                        <option>选择大小</option>
+                        <option value="u">大</option>
+                        <option value="o">小</option>
+                    </select>
+                    <select name="select-ds" id="select-ds" data-native-menu="false" multiple="multiple">
+                        <option>选择单双</option>
+                        <option value="d">单</option>
+                        <option value="s">双</option>
+                    </select>
+                    <select name="select-ws" id="select-ws" data-native-menu="false" multiple="multiple">
+                        <option>选择尾数</option>
+                        <option value="0">0尾</option>
+                        <option value="1">1尾</option>
+                        <option value="2">2尾</option>
+                        <option value="3">3尾</option>
+                        <option value="4">4尾</option>
+                        <option value="5">5尾</option>
+                        <option value="6">6尾</option>
+                        <option value="7">7尾</option>
+                        <option value="8">8尾</option>
+                        <option value="9">9尾</option>
+                    </select>
+                </fieldset>
+            </div>
+            @foreach($zodiacs_ball as $zodiac=>$nums)
+                <ul class="{{ $loop->first?'first':'' }}">
+                    <li class="issue">{{ $zodiac }}</li>
+                    @foreach($nums as $num)
+                        <li class="tz">
                         <span data-value="{{ $num }}"
                               data-zodiac="{{ $zodiac }}"
                               data-uo="{{ $num>24?'u':'o' }}"
@@ -76,29 +81,31 @@
                               class="ball {{ $num_attr[$num*1]['color'] }}">
                             {{ $num<10?('0'.$num):$num }}
                         </span>
-                        <span class="odd">{{ '@'.number_format($game->odd, 2) }}</span>
-                    </li>
-                @endforeach
-            </ul>
-        @endforeach
-    </div>
-
-    <div data-role="popup" id="purchase" data-overlay-theme="b" data-theme="b" data-dismissible="false"
-         style="max-width:400px;">
-        <div data-role="header" data-theme="a"><h1>确认投注</h1></div>
-        <div role="main" class="ui-content">
-            <p>您确定要投注<i class="odd purchase">￥0.00 </i>吗？</p>
-            <a href="#" onclick="purchasePost();"
-               class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-check ui-btn-icon-left"
-               data-rel="back">确定</a>
-            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-delete ui-btn-icon-left"
-               data-rel="back" data-transition="flow">取消</a>
+                            <span class="odd">{{ '@'.number_format($game->odd, 2) }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            @endforeach
         </div>
-    </div>
+        <div data-role="popup" id="purchase" data-overlay-theme="b" data-theme="b" data-dismissible="false"
+             style="max-width:400px;">
+            <div data-role="header" data-theme="a"><h1>确认投注</h1></div>
+            <div role="main" class="ui-content">
+                <p>您确定要投注<i class="odd purchase">￥0.00 </i>吗？</p>
+                <a href="#" onclick="purchasePost();"
+                   class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-check ui-btn-icon-left"
+                   data-rel="back">确定</a>
+                <a href="#"
+                   class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-delete ui-btn-icon-left"
+                   data-rel="back" data-transition="flow">取消</a>
+            </div>
+        </div>
+    @endif
 @endsection
 
 @section('footer')
-    <div data-role="footer" data-position="fixed">
+    @if(isset($game))
+        <div data-role="footer" data-position="fixed">
         <h1>开奖时间：{{ substr($issue->date,5,11) }}</h1>
         <div class="tz-num-list cart" style="display: none;">
             <input type="number" id="capital" placeholder="本金" data-clear-btn="true">
@@ -113,14 +120,16 @@
                 </ul>
             </div>
             <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop"
-               class="ui-btn ui-corner-all ui-btn-b ui-state-disabled" style="display: block;">￥100 投注</a>
+               class="ui-btn ui-corner-all ui-btn-b ui-state-disabled" style="display: block;">￥0.00 投注</a>
             <p style="text-align: center;color: #bd362f;margin-top: 0.5em;margin-bottom: 0.5em;">请在开奖前10分钟投注</p>
         </div>
     </div>
+    @endif
 @endsection
 
 @section('js')
     <script>
+        var gameOdd = parseFloat('{{ $game->odd }}');
         var zodiacs = [];
         $('#select-zodiacs').bind('change', function (e) {
             zodiacs.splice(0, zodiacs.length);
@@ -180,8 +189,6 @@
                 selected_ball.push(this);
             }
             reload();
-//            e.preventDefault();
-//            e.stopPropagation();
             return false;
         });
 
@@ -195,8 +202,6 @@
                 }
             }
             reload();
-//            e.preventDefault();
-//            e.stopPropagation();
             return false;
         });
 
@@ -323,9 +328,9 @@
                 $('.cart').hide();
             }
 
-            var odd = (45 / selected_ball.length).toFixed(2);
+            var odd = (gameOdd / selected_ball.length).toFixed(2);
             $('.cart .odd').html('@' + odd);
-            var capital = parseFloat($('#capital').val());
+//            var capital = parseFloat($('#capital').val());
             if (isNaN(capital)) {
                 $('.price').html('￥0.00 ');
             } else {
@@ -359,19 +364,17 @@
                 return;
             }
             if (capital < 2) {
-                LAlert('本金必须大于2', 'b');
+                LAlert('本金必须在2以上', 'b');
                 return;
             }
             var balls_str = balls.join('|');
             var token = '{{ csrf_token() }}';
             var issue = '{{ $issue->id }}';
-            var gameId = '{{ $game->game_id }}';
             $.mobile.loading("show");
             $.post('/mobiles/games/te/post/', {
                 'total_fee': capital.toFixed(2),
                 'balls': balls_str,
                 'issue': issue,
-                'gameId': gameId,
                 '_token': token
             }, function (data) {
                 $.mobile.loading("hide");

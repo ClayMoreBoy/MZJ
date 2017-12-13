@@ -129,7 +129,7 @@ class OrderController extends Controller
                         $zodiacs[] = $this->getNumberAttr($year, $num)['zodiac'];
                     }
                     //命中
-                    if (!empty(array_intersect($order->items, $zodiacs))) {
+                    if (in_array($order->items, $zodiacs)) {
                         $order->status = UOrder::k_status_done;
                         $order->hit = UOrder::k_hit_win;
                         $order->hit_item = $order->items;

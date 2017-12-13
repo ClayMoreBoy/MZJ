@@ -97,7 +97,7 @@ class OrderController extends Controller
             if (!isset($games[$order->game_id])) {
                 if (isset($order->game)) {
                     $games[$order->game_id]['game'] = $order->game;
-                    $games[$order->game_id]['total'] = $order->total_fee;
+                    $games[$order->game_id]['total'] = 0;
                     foreach ($order->game->listItems() as $item) {
                         $games[$order->game_id]['items'][$item]['item'] = $item;
                         $games[$order->game_id]['items'][$item]['count'] = 0;

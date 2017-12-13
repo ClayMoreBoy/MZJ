@@ -41,17 +41,40 @@
                                    {{ $game->on_off==1?'checked':'' }}
                                    onchange="gameOnOff(this);">
                         </div>
-                        <div class="odd_{{ $game->game_id }}">
-                            <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
-                                <button disabled="disabled">赔率</button>
-                                <input type="text"
-                                       id="odd_{{ $game->game_id }}"
-                                       size="14"
-                                       value="{{ number_format($game->odd, 2) }}"
-                                       data-wrapper-class="controlgroup-textinput ui-btn">
-                                <button onclick="updateOdd({{ $game->game_id }})">确定</button>
+                        @if($game->game_id == \App\Models\UGame::k_type_all_zodiac)
+                            <div class="odd_{{ $game->game_id }}">
+                                <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
+                                    <button disabled="disabled">普宵</button>
+                                    <input type="text"
+                                           id="odd_{{ $game->game_id }}"
+                                           size="14"
+                                           value="{{ number_format($game->odd, 2) }}"
+                                           data-wrapper-class="controlgroup-textinput ui-btn">
+                                    <button onclick="updateOdd({{ $game->game_id }})">确定</button>
+                                </div>
+                                <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
+                                    <button disabled="disabled">特宵</button>
+                                    <input type="text"
+                                           id="odd1_{{ $game->game_id }}"
+                                           size="14"
+                                           value="{{ number_format($game->odd1, 2) }}"
+                                           data-wrapper-class="controlgroup-textinput ui-btn">
+                                    <button onclick="updateOdd1({{ $game->game_id }})">确定</button>
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="odd_{{ $game->game_id }}">
+                                <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
+                                    <button disabled="disabled">赔率</button>
+                                    <input type="text"
+                                           id="odd_{{ $game->game_id }}"
+                                           size="14"
+                                           value="{{ number_format($game->odd, 2) }}"
+                                           data-wrapper-class="controlgroup-textinput ui-btn">
+                                    <button onclick="updateOdd({{ $game->game_id }})">确定</button>
+                                </div>
+                            </div>
+                        @endif
                     </li>
                 @endforeach
             </ul>
@@ -102,6 +125,25 @@
             '_token': '{{ csrf_token() }}',
             id: id,
             key: 'odd',
+            value: value
+        }, function (data) {
+            $.mobile.loading("hide");
+            if (data.code == 0) {
+                LAlert('更新成功', 'a');
+            } else if (data.code == 403) {
+                location.reload();
+            } else {
+                LAlert(data.message, 'b');
+            }
+        });
+    }
+    function updateOdd1(id) {
+        var value = $('#odd1_' + id).val();
+        $.mobile.loading("show");
+        $.post('/merchant/game/update/', {
+            '_token': '{{ csrf_token() }}',
+            id: id,
+            key: 'odd1',
             value: value
         }, function (data) {
             $.mobile.loading("hide");

@@ -170,7 +170,7 @@
         }
 
         function purchasePost() {
-            if (selected_ball != '') {
+            if (selected_ball == '') {
                 LAlert('参数错误', 'b');
                 return;
             }

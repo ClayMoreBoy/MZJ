@@ -146,4 +146,36 @@
     </div>
 @endsection
 
+@section('js')
+    <script>
+        $(function () {
+            var H = 0;
+            var M = 0;
+            $.getJSON('/json/t.json?t=' + (new Date().getTime()), function (d) {
+                H = d.H;
+                M = d.M;
+            });
+            setInterval(function () {
+                if (H >= 20 && H < 22 && M >= 0) {
+                    $.getJSON('/json/{{ request('k','k1') }}.json?t=' + (new Date().getTime()), function (d) {
+                        k = d.k;
+                        ks = k.split(',');
+                        issue = parseInt($('.first .issue').html()) % 1000;
+                        if (issue == parseInt(ks[0])) {
+                            $('.first .ball').each(function (i, d) {
+                                $(d).html(ks[i + 1]);
+                            });
+                        }
+                    });
+                }
+            }, 3000);
+            setInterval(function () {
+                $.getJSON('/json/t.json?t=' + (new Date().getTime()), function (d) {
+                    H = d.H;
+                    M = d.M;
+                });
+            }, 60000);
+        });
+    </script>
+@endsection
 

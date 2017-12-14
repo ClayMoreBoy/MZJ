@@ -20,7 +20,7 @@ class LottoController extends BaseController
     public function index()
     {
         $issues = Issue::query()
-            ->where('date', '<', date_create('+12 hour'))
+            ->where('date', '<', date_create('+36 hour'))
             ->orderBy('id', 'desc')
             ->paginate();
         return view('mobiles.index', ['issues' => $issues, 'num_attr' => $this->num_attr]);

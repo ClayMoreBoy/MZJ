@@ -63,7 +63,7 @@
             <div class="tz-num-list cart" style="display: none;">
                 <input type="number" id="capital" placeholder="本金" data-clear-btn="true">
                 <p style="margin-top: .5em;margin-bottom: 0.5em">
-                    综合赔率<i class="odd">@0.00</i>；返还<i class="odd price">￥0.00</i>。
+                    赔率<i class="odd">@0.00</i>；最高返还<i class="odd price">￥0.00</i>。
                 </p>
                 <div class="basket">
                     <ul>
@@ -140,13 +140,12 @@
             } else {
                 $('.cart').hide();
             }
-            var odd = (gameOdd / selected_ball.length).toFixed(2);
-            $('.cart .odd').html('@' + odd);
-//            var capital = parseFloat($('#capital').val());
+            $('.cart .odd').html('@' + gameOdd.toFixed(2));
             if (isNaN(capital)) {
                 $('.price').html('￥0.00 ');
             } else {
-                $('.price').html('￥' + (capital * odd).toFixed(2) + ' ');
+                var odd = (gameOdd / selected_ball.length).toFixed(2);
+                $('.price').html('￥' + (capital * odd * Math.min(selected_ball.length,7)).toFixed(2) + ' ');
             }
         }
 

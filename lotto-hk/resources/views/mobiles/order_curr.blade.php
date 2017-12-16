@@ -26,14 +26,14 @@
         }
 
         .fee {
-            width: 33.33%;
+            width: 30%;
             font-size: .8em;
             position: relative;
             display: inline-block;
         }
 
         .odd {
-            width: 33.33%;
+            width: 30%;
             font-size: .8em;
             line-height: 1.6em;
             height: 1.6em;
@@ -42,7 +42,7 @@
         }
 
         .bonus {
-            width: 33.33%;
+            width: 40%;
             font-size: .8em;
             line-height: 1.6em;
             height: 1.6em;
@@ -73,7 +73,7 @@
             color: #FB223D;
         }
 
-        .money.clean,.money.un-hit {
+        .money.clean, .money.un-hit {
             color: #9BA2AB;
             text-decoration: line-through;
 
@@ -117,19 +117,20 @@
                             <h3>{{ $order->game->name }}</h3>
                             <div class="items">
                                 @foreach(explode('|',$order->items) as $item)
-                                    <span class="ball {{ str_contains($item,$order->hit_item)?'hit':'' }}">{{ $item }}</span>
+                                    <span class="ball {{ str_contains($order->hit_item, $item)?'hit':'' }}">{{ $item }}</span>
                                 @endforeach
                             </div>
-                            <div class="items" style="clear: left">
+                            <div class="items" style="clear: left;">
                                 <span class="fee">
                                     本金:<strong
-                                            class="money">{{ '￥'.number_format($order->total_fee,2,'.','') }}</strong>
+                                            class="money">{{ '￥'.number_format($order->total_fee, 2 ,'.' ,'') }}</strong>
                                 </span>
                                 <span class="odd">
-                                    赔率:<strong class="money">{{ '@'.number_format($order->odd,2,'.','') }}</strong>
+                                    赔率:<strong class="money">{{ '@'.number_format($order->odd, 2, '.', '') }}</strong>
                                 </span>
                                 <span class="bonus">
-                                    返还:<strong class="money {{ $order->statusCSS() }}">{{ '￥'.number_format($order->bonus,2,'.','') }}</strong>
+                                    @if($order->game_id == \App\Models\UGame::k_type_all_solo)最高返还:@else返还:@endif
+                                    <strong class="money {{ $order->statusCSS() }}">{{ '￥'.number_format($order->bonus, 2, '.', '') }}</strong>
                                 </span>
                             </div>
                             <div class="items">
@@ -137,7 +138,7 @@
                                     状态:<strong class="{{ $order->statusCSS() }}">{{ $order->statusCN() }}</strong>
                                 </span>
                                 <span class="date">
-                                    <strong>{{ substr($order->created_at,0,16) }}</strong>
+                                    <strong>{{ substr($order->created_at, 0, 16) }}</strong>
                                 </span>
                             </div>
                         </li>

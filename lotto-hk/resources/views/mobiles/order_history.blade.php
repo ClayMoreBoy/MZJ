@@ -26,14 +26,14 @@
         }
 
         .fee {
-            width: 33.33%;
+            width: 30%;
             font-size: .8em;
             position: relative;
             display: inline-block;
         }
 
         .odd {
-            width: 33.33%;
+            width: 30%;
             font-size: .8em;
             line-height: 1.6em;
             height: 1.6em;
@@ -42,7 +42,7 @@
         }
 
         .bonus {
-            width: 33.33%;
+            width: 40%;
             font-size: .8em;
             line-height: 1.6em;
             height: 1.6em;
@@ -116,7 +116,7 @@
                             <h3>{{ $order->game->name }}</h3>
                             <div class="items">
                                 @foreach(explode('|',$order->items) as $item)
-                                    <span class="ball {{ str_contains($item,$order->hit_item)?'hit':'' }}">{{ $item }}</span>
+                                    <span class="ball {{ str_contains($order->hit_item, $item)?'hit':'' }}">{{ $item }}</span>
                                 @endforeach
                             </div>
                             <div class="items" style="clear: left">

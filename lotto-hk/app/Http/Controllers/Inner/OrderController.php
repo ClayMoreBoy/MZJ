@@ -63,7 +63,8 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                } //平特
+                }
+                //平特单挑
                 elseif ($order->game_id == UGame::k_type_all_solo) {
                     DB::beginTransaction();
                     $nums = [
@@ -81,6 +82,7 @@ class OrderController extends Controller
                         $order->status = UOrder::k_status_done;
                         $order->hit = UOrder::k_hit_win;
                         $order->hit_item = join('|', $hit_items);
+                        $order->bonus = count($hit_items) * $order->bonus;//每中一个加一倍
                         if ($order->save()) {
                             $order->account->balance += $order->bonus;
                             if ($order->account->save()) {
@@ -112,7 +114,9 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                } elseif ($order->game_id == UGame::k_type_all_zodiac) {
+                }
+                //平特生肖
+                elseif ($order->game_id == UGame::k_type_all_zodiac) {
                     DB::beginTransaction();
                     $nums = [
                         $order->issueO->num1,

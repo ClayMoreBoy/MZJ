@@ -11,14 +11,7 @@
 @endsection
 
 @section('nav')
-    {{--<div data-role="navbar" data-inset="false">--}}
-    {{--<ul>--}}
-    {{--<li><a href="#" class="ui-btn-active">首页</a></li>--}}
-    {{--<li><a href="#">页面二</a></li>--}}
-    {{--<li><a href="#">页面二</a></li>--}}
-    {{--<li><a href="#">页面二</a></li>--}}
-    {{--</ul>--}}
-    {{--</div>--}}
+
 @endsection
 
 @section('content')

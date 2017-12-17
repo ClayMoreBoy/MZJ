@@ -183,7 +183,7 @@
                         <h3>{{ '第'.$order->issue.'期-'.$order->game->name }}</h3>
                         <div class="items">
                             @foreach(explode('|',$order->items) as $item)
-                                <span class="ball {{ str_contains($item,$order->hit_item)?'hit':'' }}">{{ $item }}</span>
+                                <span class="ball {{ str_contains($order->hit_item,$item)?'hit':'' }}">{{ $item }}</span>
                             @endforeach
                         </div>
                         <div class="items" style="clear: left">

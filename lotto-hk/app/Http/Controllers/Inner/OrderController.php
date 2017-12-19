@@ -63,8 +63,7 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                }
-                //平特单挑
+                } //平特单挑
                 elseif ($order->game_id == UGame::k_type_all_solo) {
                     DB::beginTransaction();
                     $nums = [
@@ -114,8 +113,7 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                }
-                //平特生肖
+                } //平特生肖
                 elseif ($order->game_id == UGame::k_type_all_zodiac) {
                     DB::beginTransaction();
                     $nums = [
@@ -131,6 +129,7 @@ class OrderController extends Controller
                     $zodiacs = [];
                     foreach ($nums as $num) {
                         $zodiacs[] = $this->getNumberAttr($year, $num)['zodiac'];
+//                        dump($num.'='.$this->getNumberAttr($year, $num)['zodiac']);
                     }
                     //命中
                     if (in_array($order->items, $zodiacs)) {

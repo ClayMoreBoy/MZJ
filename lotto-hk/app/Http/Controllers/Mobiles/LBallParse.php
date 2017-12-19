@@ -57,14 +57,9 @@ trait LBallParse
     private function getNumberAttr($year, $number)
     {
         $cal = new Calendar();
-        if ($year == date('Y')) {
-            $first_zodiac_index = $this->first_zodiac_index;
-        } else {
-            $first_zodiac = $cal->Cal($year)['zodiac'];
-            $first_zodiac_index = array_search($first_zodiac, $this->zodiacs);
-        }
+        $first_zodiac = $cal->Cal($year)['zodiac'];
+        $first_zodiac_index = array_search($first_zodiac, $this->zodiacs);
         $index = (60 + $first_zodiac_index - ($number - 1)) % 12;
-
         $color = '';
         if (in_array($number, $this->blue_ball)) {
             $color = '蓝波';

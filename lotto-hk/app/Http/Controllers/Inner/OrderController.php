@@ -23,8 +23,7 @@ class OrderController extends Controller
         $orders = UOrder::query()->where('status', UOrder::k_status_unknown)->take(100)->get();
         foreach ($orders as $order) {
             if ($order->issueO->status == Issue::k_status_done) {
-                //特码
-                if ($order->game_id == UGame::k_type_te_solo) {
+                if ($order->game_id == UGame::k_type_te_solo) {//特码
                     DB::beginTransaction();
                     $num = $order->issueO->num7;
                     //命中
@@ -63,8 +62,8 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                } //平特单挑
-                elseif ($order->game_id == UGame::k_type_all_solo) {
+                }
+                elseif ($order->game_id == UGame::k_type_all_solo) {//平特单码
                     DB::beginTransaction();
                     $nums = [
                         $order->issueO->num1,
@@ -75,13 +74,14 @@ class OrderController extends Controller
                         $order->issueO->num6,
                         $order->issueO->num7
                     ];
-                    $hit_items = array_intersect($nums, explode('|', $order->items));
+                    $items = explode('|', $order->items);
+                    $hit_items = array_intersect($nums, $items);
                     //命中
                     if (!empty($hit_items)) {
                         $order->status = UOrder::k_status_done;
                         $order->hit = UOrder::k_hit_win;
                         $order->hit_item = join('|', $hit_items);
-                        $order->bonus = count($hit_items) * $order->bonus;//每中一个加一倍
+                        $order->bonus = round(($order->total_fee / count($items)) * $order->odd * count($hit_items), 2);//每中一个加一倍
                         if ($order->save()) {
                             $order->account->balance += $order->bonus;
                             if ($order->account->save()) {
@@ -113,8 +113,8 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                } //平特生肖
-                elseif ($order->game_id == UGame::k_type_all_zodiac) {
+                }
+                elseif ($order->game_id == UGame::k_type_all_zodiac) {//平特单肖
                     DB::beginTransaction();
                     $nums = [
                         $order->issueO->num1,
@@ -129,13 +129,131 @@ class OrderController extends Controller
                     $zodiacs = [];
                     foreach ($nums as $num) {
                         $zodiacs[] = $this->getNumberAttr($year, $num)['zodiac'];
-//                        dump($num.'='.$this->getNumberAttr($year, $num)['zodiac']);
                     }
+                    $items = explode('|', $order->items);
+                    $hit_items = array_intersect($zodiacs, $items);
                     //命中
-                    if (in_array($order->items, $zodiacs)) {
+                    if (!empty($hit_items)) {
                         $order->status = UOrder::k_status_done;
                         $order->hit = UOrder::k_hit_win;
-                        $order->hit_item = $order->items;
+                        $order->hit_item = join('|', $hit_items);
+                        $game = $order->merchant->games->where('game_id', $order->game_id)->first();
+                        $preFee = $order->total_fee / count($items);
+                        $bonus = 0;
+                        foreach ($hit_items as $hit_item) {
+                            if ($this->isFirstZodiac($year, $hit_item)) {
+                                $bonus += $preFee * $game->odd1;
+                            } else {
+                                $bonus += $preFee * $game->odd;
+                            }
+                        }
+                        $order->bonus = round($bonus, 2);
+                        $order->odd = round($bonus / $order->total_fee, 2);
+                        if ($order->save()) {
+                            $order->account->balance += $order->bonus;
+                            if ($order->account->save()) {
+                                $sell = new UAccountBill();
+                                $sell->account_id = $order->account_id;
+                                $sell->merchant_id = $order->merchant_id;
+                                $sell->agent_id = $order->agent_id;
+                                $sell->fee = $order->bonus;
+                                $sell->type = UAccountBill::k_type_bonus;
+                                $sell->tid = $order->id;
+                                $sell->describe = '返奖';
+                                if ($sell->save()) {
+                                    DB::commit();
+                                } else {
+                                    DB::rollBack();
+                                }
+                            } else {
+                                DB::rollBack();
+                            }
+                        } else {
+                            DB::rollBack();
+                        }
+                    } else {//未命中
+                        $order->status = UOrder::k_status_done;
+                        $order->hit = UOrder::k_hit_lose;
+                        if ($order->save()) {
+                            DB::commit();
+                        } else {
+                            DB::rollBack();
+                        }
+                    }
+                }
+                elseif (in_array($order->game_id, [UGame::k_type_all_zodiac_two, UGame::k_type_all_zodiac_three, UGame::k_type_all_zodiac_four, UGame::k_type_all_zodiac_five, UGame::k_type_all_zodiac_six])) {
+                    DB::beginTransaction();
+                    $nums = [
+                        $order->issueO->num1,
+                        $order->issueO->num2,
+                        $order->issueO->num3,
+                        $order->issueO->num4,
+                        $order->issueO->num5,
+                        $order->issueO->num6,
+                        $order->issueO->num7
+                    ];
+                    $year = substr($order->issueO->date, 0, 4);
+                    $zodiacs = [];
+                    foreach ($nums as $num) {
+                        $zodiacs[] = $this->getNumberAttr($year, $num)['zodiac'];
+                    }
+                    $items = explode('|', $order->items);
+                    $hit_items = array_intersect($zodiacs, $items);
+                    //命中
+                    if (count($hit_items) == count($items)) {
+                        $order->status = UOrder::k_status_done;
+                        $order->hit = UOrder::k_hit_win;
+                        $order->hit_item = join('|', $hit_items);
+                        if ($order->save()) {
+                            $order->account->balance += $order->bonus;
+                            if ($order->account->save()) {
+                                $sell = new UAccountBill();
+                                $sell->account_id = $order->account_id;
+                                $sell->merchant_id = $order->merchant_id;
+                                $sell->agent_id = $order->agent_id;
+                                $sell->fee = $order->bonus;
+                                $sell->type = UAccountBill::k_type_bonus;
+                                $sell->tid = $order->id;
+                                $sell->describe = '返奖';
+                                if ($sell->save()) {
+                                    DB::commit();
+                                } else {
+                                    DB::rollBack();
+                                }
+                            } else {
+                                DB::rollBack();
+                            }
+                        } else {
+                            DB::rollBack();
+                        }
+                    } else {//未命中
+                        $order->status = UOrder::k_status_done;
+                        $order->hit = UOrder::k_hit_lose;
+                        if ($order->save()) {
+                            DB::commit();
+                        } else {
+                            DB::rollBack();
+                        }
+                    }
+                }
+                elseif (in_array($order->game_id, [UGame::k_type_all_two, UGame::k_type_all_three, UGame::k_type_all_four, UGame::k_type_all_five, UGame::k_type_all_six])) {
+                    DB::beginTransaction();
+                    $nums = [
+                        $order->issueO->num1,
+                        $order->issueO->num2,
+                        $order->issueO->num3,
+                        $order->issueO->num4,
+                        $order->issueO->num5,
+                        $order->issueO->num6,
+                        $order->issueO->num7
+                    ];
+                    $items = explode('|', $order->items);
+                    $hit_items = array_intersect($nums, $items);
+                    //命中
+                    if (count($hit_items) == count($items)) {
+                        $order->status = UOrder::k_status_done;
+                        $order->hit = UOrder::k_hit_win;
+                        $order->hit_item = join('|', $hit_items);
                         if ($order->save()) {
                             $order->account->balance += $order->bonus;
                             if ($order->account->save()) {

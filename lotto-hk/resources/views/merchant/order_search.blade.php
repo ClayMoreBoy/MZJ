@@ -191,10 +191,10 @@
                                 本金:<strong class="money">{{ '￥'.number_format($order->total_fee,2,'.','') }}</strong>
                             </span>
                             <span class="odd">
-                                赔率:<strong class="money">{{ '@'.number_format($order->odd,2,'.','') }}</strong>
+                                {{ $order->oddName() }}:<strong class="money">{{ '@'.number_format($order->odd,2,'.','') }}</strong>
                             </span>
                             <span class="bonus">
-                                返还:<strong
+                                {{ $order->bonusName() }}:<strong
                                         class="money {{ $order->statusCSS() }}">{{ '￥'.number_format($order->bonus,2,'.','') }}</strong>
                             </span>
                         </div>

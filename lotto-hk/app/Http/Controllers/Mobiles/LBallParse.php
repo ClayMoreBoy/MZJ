@@ -70,4 +70,11 @@ trait LBallParse
         }
         return ['color' => $color, 'zodiac' => $this->zodiacs[$index]];
     }
+
+    private function isFirstZodiac($year, $zodiac)
+    {
+        $cal = new Calendar();
+        $first_zodiac = $cal->Cal($year)['zodiac'];
+        return $zodiac == $first_zodiac;
+    }
 }

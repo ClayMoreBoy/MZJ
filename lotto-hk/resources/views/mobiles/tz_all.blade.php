@@ -1,10 +1,14 @@
 @extends('mobiles.layout.main')
 
 @section('css')
-    <link href="{{ asset('/css/mobiles/index.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/mobiles/index.css?_t='.time()) }}" rel="stylesheet">
     <style>
         .ui-header .ui-title {
             margin: 0 25%;
+        }
+
+        .ball {
+            background: #2F3133;
         }
     </style>
 @endsection
@@ -26,6 +30,7 @@
                     @foreach($nums as $num)
                         <li class="tz">
                         <span data-value="{{ $num }}"
+                              data-odd="{{ $game->odd }}"
                               data-zodiac="{{ $zodiac }}"
                               data-uo="{{ $num>24?'u':'o' }}"
                               data-ds="{{ $num%2==0?'s':'d' }}"
@@ -60,17 +65,15 @@
     @if(isset($game))
         <div data-role="footer" data-position="fixed">
             <h1>开奖时间：{{ substr($issue->date,5,11) }}</h1>
-            <div class="tz-num-list cart" style="display: none;">
+            <div class="cart" style="display: block;">
                 <input type="number" id="capital" placeholder="本金" data-clear-btn="true">
                 <p style="margin-top: .5em;margin-bottom: 0.5em">
-                    赔率<i class="odd">@0.00</i>；最高返还<i class="odd price">￥0.00</i>。
+                    {{ $game->oddName() }}:<i class="odd">@0.00</i>；{{ $game->bonusName() }}:<i class="odd price">￥0.00</i>。
                 </p>
                 <div class="basket">
-                    <ul>
-                        {{--<li>--}}
-                        {{--<span class="ball green selective">02</span>--}}
-                        {{--</li>--}}
-                    </ul>
+                    @for($i = 0 ; $i < $game->items_min ; $i++)
+                        <span class="list"><span class="ball">?</span></span>
+                    @endfor
                 </div>
                 <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop"
                    class="ui-btn ui-corner-all ui-btn-b ui-state-disabled" style="display: block;">￥0.00 投注</a>
@@ -83,13 +86,25 @@
 @section('js')
     <script>
         var gameOdd = parseFloat('{{ $game->odd }}');
+        var itemsMax = parseFloat('{{ $game->items_max }}');
+        var itemsMin = parseFloat('{{ $game->items_min }}');
+                @if($game->game_id == \App\Models\UGame::k_type_all_solo)
+        var is_solo = true;
+                @else
+        var is_solo = false;
+                @endif
+        var selected_ball = [];
         $('.zodiac .ball').bind('tap', function (e) {
             if ($(this).hasClass('selective')) {
                 $(this).removeClass('selective');
                 selected_ball.splice(selected_ball.indexOf(this), 1);
-            } else {
+                reload();
+            } else if (selected_ball.length < itemsMax) {
                 $(this).addClass('selective');
                 selected_ball.push(this);
+                reload();
+            } else {
+                LAlert('不能超过' + itemsMax + '个选项', 'b');
             }
             reload();
             return false;
@@ -110,42 +125,58 @@
 
         var capital = 0;
         $('#capital').bind('input propertychange', function () {
-            capital = parseFloat($(this).val());
-            if (isNaN(capital)) {
-                $('.cart a').addClass("ui-state-disabled");
-                $('.cart a').html('￥0.00 投注');
-                $('.purchase').html('￥0.00 ');
-            } else {
-                $('.cart a').removeClass("ui-state-disabled");
-                $('.cart a').html('￥' + capital.toFixed(2) + ' 投注');
-                $('.purchase').html('￥' + capital.toFixed(2) + ' ');
-            }
             reload();
         });
-
-        var selected_ball = [];
 
         function reload() {
             $('li.tz .ball').each(function (i, data) {
                 $(data).removeClass('selective');
             });
+            var maxOdd = 0;
+            capital = parseFloat($('#capital').val());
             var html = '';
-            $(selected_ball).each(function (i, data) {
-                $(data).addClass('selective');
-                html += '<li>' + data.outerHTML + '</li>';
-            });
-            $('.cart ul').html(html);
+            var selectCount = 0;
             if (selected_ball.length > 0) {
-                $('.cart').show();
-            } else {
-                $('.cart').hide();
+                var prePrice = capital / selected_ball.length;
+                $(selected_ball).each(function (i, data) {
+                    $(data).addClass('selective');
+                    var odd = $(data).attr('data-odd');
+                    var value = $(data).attr('data-value');
+                    maxOdd += prePrice * odd;
+                    html += '<span class="list"><span class="' + data.className + '" data-value="' + value + '">' + data.innerText + '</span></span>';
+                    selectCount++;
+                });
             }
-            $('.cart .odd').html('@' + gameOdd.toFixed(2));
-            if (isNaN(capital)) {
-                $('.price').html('￥0.00 ');
+            for (; selectCount < itemsMin; selectCount++) {
+                html += '<span class="list"><span class="ball">?</span></span>';
+            }
+            $('.cart .basket').html(html);
+
+            if (capital == 0 || isNaN(capital) || selected_ball.length == 0) {
+                $('.cart a').addClass("ui-state-disabled");
+                $('.cart a').html('￥0.00 投注');
+                $('.purchase').html('￥0.00 ');
+                if (is_solo) {
+                    $('.cart .odd').html('@0.00');
+                } else {
+                    $('.cart .odd').html('@' + gameOdd.toFixed(2));
+                }
+                $('.cart .price').html('￥0.00 ');
             } else {
-                var odd = (gameOdd / selected_ball.length).toFixed(2);
-                $('.price').html('￥' + (capital * odd * Math.min(selected_ball.length,7)).toFixed(2) + ' ');
+                if (selected_ball.length >= itemsMin && selected_ball.length <= itemsMax) {
+                    $('.cart a').removeClass("ui-state-disabled");
+                } else {
+                    $('.cart a').addClass("ui-state-disabled");
+                }
+                $('.cart a').html('￥' + capital.toFixed(2) + ' 投注');
+                $('.purchase').html('￥' + capital.toFixed(2) + ' ');
+                if (is_solo) {
+                    $('.cart .odd').html('@' + (maxOdd / capital).toFixed(2));
+                    $('.cart .price').html('￥' + (maxOdd).toFixed(2) + ' ');
+                } else {
+                    $('.cart .odd').html('@' + gameOdd.toFixed(2));
+                    $('.cart .price').html('￥' + (gameOdd * capital).toFixed(2) + ' ');
+                }
             }
         }
 
@@ -160,8 +191,8 @@
             for (var i = 0; i < selected_ball.length; i++) {
                 balls.push(selected_ball[i].innerText);
             }
-            if (balls.length < 1 || balls.length > 49) {
-                LAlert('参数错误', 'b');
+            if (balls.length < itemsMin || balls.length > itemsMax) {
+                LAlert('选项数量错误', 'b');
                 return;
             }
             if (capital < 2) {
@@ -173,6 +204,7 @@
             var issue = '{{ $issue->id }}';
             $.mobile.loading("show");
             $.post('/mobiles/games/all/post/', {
+                'game_id': '{{ $game->game_id }}',
                 'total_fee': capital.toFixed(2),
                 'balls': balls_str,
                 'issue': issue,

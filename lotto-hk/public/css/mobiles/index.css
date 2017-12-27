@@ -1,3 +1,7 @@
+*{
+    text-shadow: none;
+}
+
 .ball.green {
     background: #1fc26b;
 }
@@ -16,7 +20,6 @@
 
 .num-list {
     margin: -1em;
-    text-shadow: none;
 }
 
 .num-list ol, .num-list ul, .num-list li {
@@ -78,6 +81,7 @@
     text-align: center;
     border-radius: 50%;
     color: #fff;
+    opacity: 1;
 }
 
 .num-list li .zodiacs {
@@ -215,12 +219,8 @@
     line-height: 2.3em;
 }
 
-.tz-num-list li .ball {
+.ball {
     opacity: .1;
-}
-
-.tz-num-list li .ball.selective {
-    opacity: 1;
 }
 
 .tz-num-list.cart {
@@ -251,8 +251,34 @@
 
 .basket {
     border: 1px solid #8D8D8D;
+    margin: .5em auto;
+    text-align: center;
+}
+
+.basket .list{
+    display: inline-block;
+    text-align: center;
+    /*width:20%;*/
+    vertical-align:top;
+    padding: .2em;
+    font-size: 1.2em;
+}
+
+.basket .ball {
+    line-height: 2em;
+    height: 2em;
+    width: 2em;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    border-radius: 50%;
+    color: #fff;
 }
 
 .ui-footer-fixed {
     padding-bottom: 0;
+}
+
+.selective {
+    opacity: 1;
 }

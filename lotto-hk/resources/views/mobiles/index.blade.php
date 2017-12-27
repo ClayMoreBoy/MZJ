@@ -1,9 +1,7 @@
 @extends('mobiles.layout.main')
 
 @section('css')
-    <link href="{{ asset('/css/mobiles/index.css') }}" rel="stylesheet">
-    <style>
-    </style>
+    <link href="{{ asset('/css/mobiles/index.css?_t='.time()) }}" rel="stylesheet">
 @endsection
 
 @section('title')

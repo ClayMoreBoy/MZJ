@@ -122,14 +122,13 @@
                             </div>
                             <div class="items" style="clear: left;">
                                 <span class="fee">
-                                    本金:<strong
-                                            class="money">{{ '￥'.number_format($order->total_fee, 2 ,'.' ,'') }}</strong>
+                                    本金:<strong class="money">{{ '￥'.number_format($order->total_fee, 2 ,'.' ,'') }}</strong>
                                 </span>
                                 <span class="odd">
-                                    赔率:<strong class="money">{{ '@'.number_format($order->odd, 2, '.', '') }}</strong>
+                                    {{ $order->oddName() }}:<strong class="money">{{ '@'.number_format($order->odd, 2, '.', '') }}</strong>
                                 </span>
                                 <span class="bonus">
-                                    @if($order->game_id == \App\Models\UGame::k_type_all_solo)最高返还:@else返还:@endif
+                                    {{ $order->bonusName() }}:
                                     <strong class="money {{ $order->statusCSS() }}">{{ '￥'.number_format($order->bonus, 2, '.', '') }}</strong>
                                 </span>
                             </div>

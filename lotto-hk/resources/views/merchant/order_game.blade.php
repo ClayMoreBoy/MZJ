@@ -52,7 +52,7 @@
                 @foreach($games as $key => $game)
                     <li>
                         <a href="#page_game_{{ $key }}">
-                            <h3>{{ $game['game']->name }},总销售:￥{{ number_format($game['total'],2) }}</h3>
+                            <h3>{{ $game['game']->name }},总销售:￥{{ number_format($game['total'],2,'.','') }}</h3>
                         </a>
                     </li>
                 @endforeach
@@ -71,7 +71,7 @@
             <div style="margin:-1em -1em;">
                 <div class="ui-grid-solo">
                     <div class="ui-block-a">
-                        <div class="ui-bar ui-bar-b">第{{ $issue_id }}期,总销售:￥{{ number_format($game['total'],2) }}</div>
+                        <div class="ui-bar ui-bar-b">第{{ $issue_id }}期,总销售:￥{{ number_format($game['total'],2,'.','') }}</div>
                     </div>
                 </div>
                 <div class="ui-grid-c">
@@ -94,13 +94,13 @@
                             <div class="ui-bar ui-bar-a">{{ $values['item'] }}</div>
                         </div>
                         <div class="ui-block-b">
-                            <div class="ui-bar ui-bar-a">{{ number_format($values['fee'],2) }}</div>
+                            <div class="ui-bar ui-bar-a">{{ number_format($values['fee'],2,'.','') }}</div>
                         </div>
                         <div class="ui-block-c">
-                            <div class="ui-bar ui-bar-a">{{ number_format($values['bonus'],2) }}</div>
+                            <div class="ui-bar ui-bar-a">{{ number_format($values['bonus'],2,'.','') }}</div>
                         </div>
                         <div class="ui-block-c">
-                            <div class="ui-bar ui-bar-a {{ ($game['total']-$values['bonus'])>0?'win':'lose' }}">{{ number_format($game['total']-$values['bonus'],2) }}</div>
+                            <div class="ui-bar ui-bar-a {{ ($game['total']-$values['bonus'])>0?'win':'lose' }}">{{ number_format($game['total']-$values['bonus'],2,'.','') }}</div>
                         </div>
                     </div>
                 @endforeach

@@ -99,7 +99,7 @@
                             </div>
                         </div>
                         <div class="ui-block-b">
-                            <div class="ui-bar ui-bar-a"><span class="line">{{ number_format($withdraw->fee,2) }}</span>
+                            <div class="ui-bar ui-bar-a"><span class="line">{{ number_format($withdraw->fee,2,'.','') }}</span>
                             </div>
                         </div>
                         <div class="ui-block-c">

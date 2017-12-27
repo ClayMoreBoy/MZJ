@@ -41,14 +41,14 @@
                                    {{ $game->on_off==1?'checked':'' }}
                                    onchange="gameOnOff(this);">
                         </div>
-                        @if($game->game_id == \App\Models\UGame::k_type_all_zodiac)
+                        @if(in_array($game->game_id,[\App\Models\UGame::k_type_all_zodiac,\App\Models\UGame::k_type_all_zodiac_three,\App\Models\UGame::k_type_all_zodiac_two,\App\Models\UGame::k_type_all_zodiac_six,\App\Models\UGame::k_type_all_zodiac_five,\App\Models\UGame::k_type_all_zodiac_four]))
                             <div class="odd_{{ $game->game_id }}">
                                 <div data-role="controlgroup" data-type="horizontal" class="ui-mini">
                                     <button disabled="disabled">普宵</button>
                                     <input type="text"
                                            id="odd_{{ $game->game_id }}"
                                            size="14"
-                                           value="{{ number_format($game->odd, 2) }}"
+                                           value="{{ number_format($game->odd, 2,'.','') }}"
                                            data-wrapper-class="controlgroup-textinput ui-btn">
                                     <button onclick="updateOdd({{ $game->game_id }})">确定</button>
                                 </div>
@@ -57,7 +57,7 @@
                                     <input type="text"
                                            id="odd1_{{ $game->game_id }}"
                                            size="14"
-                                           value="{{ number_format($game->odd1, 2) }}"
+                                           value="{{ number_format($game->odd1, 2,'.','') }}"
                                            data-wrapper-class="controlgroup-textinput ui-btn">
                                     <button onclick="updateOdd1({{ $game->game_id }})">确定</button>
                                 </div>
@@ -69,7 +69,7 @@
                                     <input type="text"
                                            id="odd_{{ $game->game_id }}"
                                            size="14"
-                                           value="{{ number_format($game->odd, 2) }}"
+                                           value="{{ number_format($game->odd, 2,'.','') }}"
                                            data-wrapper-class="controlgroup-textinput ui-btn">
                                     <button onclick="updateOdd({{ $game->game_id }})">确定</button>
                                 </div>

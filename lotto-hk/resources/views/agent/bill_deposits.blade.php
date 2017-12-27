@@ -67,7 +67,7 @@
                             <div class="ui-bar ui-bar-a">{{ $deposit->account->nickname }}</div>
                         </div>
                         <div class="ui-block-b">
-                            <div class="ui-bar ui-bar-a">{{ number_format($deposit->fee,2) }}</div>
+                            <div class="ui-bar ui-bar-a">{{ number_format($deposit->fee,2,'.','') }}</div>
                         </div>
                         <div class="ui-block-c">
                             <div class="ui-bar ui-bar-a">{{ substr($deposit->updated_at,5,11) }}</div>

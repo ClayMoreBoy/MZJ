@@ -51,6 +51,8 @@ class AuthController extends Controller
                     $umg->odd = $game->odd;
                     $umg->odd1 = $game->odd1;
                     $umg->path = $game->path;
+                    $umg->items_min = $game->items_min;
+                    $umg->items_max = $game->items_max;
                     if (!$umg->save()) {
                         DB::rollBack();
                         return response()->json(["code" => 401, "msg" => "服务器异常！"]);
@@ -64,5 +66,41 @@ class AuthController extends Controller
             return response()->json(["code" => 0, "msg" => "OK"]);
         }
         return view('inner.created_merchant');
+    }
+
+    public function syncGames(Request $request)
+    {
+        if ($request->has('id')) {
+            $umas = UMerchantAccount::query()->where('id', $request->input('id'))->get();
+        } else {
+            $umas = UMerchantAccount::query()->get();
+        }
+        if (isset($umas)) {
+            $games = UGame::query()->get();
+            foreach ($umas as $uma) {
+                foreach ($games as $game) {
+                    $umg = $uma->games()->where('game_id', $game->id)->first();
+                    if (isset($umg)) {
+                        $umg->name = $game->name;
+                        $umg->path = $game->path;
+                        $umg->items_min = $game->items_min;
+                        $umg->items_max = $game->items_max;
+                        $umg->save();
+                    } else {
+                        $umg = new UMerchantGame();
+                        $umg->merchant_id = $uma->id;
+                        $umg->game_id = $game->id;
+                        $umg->name = $game->name;
+                        $umg->on_off = $game->on_off;
+                        $umg->odd = $game->odd;
+                        $umg->odd1 = $game->odd1;
+                        $umg->path = $game->path;
+                        $umg->items_min = $game->items_min;
+                        $umg->items_max = $game->items_max;
+                        $umg->save();
+                    }
+                }
+            }
+        }
     }
 }

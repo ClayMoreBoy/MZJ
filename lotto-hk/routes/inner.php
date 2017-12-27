@@ -15,8 +15,7 @@ use Illuminate\Http\Request;
 
 Route::group(["namespace" => "Inner"], function () {
     Route::any('/create-merchant-account', 'AuthController@createMerchantAccount');
-//    Route::post('/create-agent-account', 'AuthController@createAgentAccount');
-//    Route::post('/create-account', 'AuthController@createAccount');
+    Route::any('/sync-games', 'AuthController@syncGames');
 
     Route::get('/hit', 'OrderController@hit');
     Route::get('/report', 'OrderController@report');

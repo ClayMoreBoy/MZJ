@@ -80,4 +80,28 @@ class UOrder extends LModel
         }
         return 'unknown';
     }
+
+    public function oddName()
+    {
+        switch ($this->game_id) {
+            case UGame::k_type_all_solo: //平特单码
+            case UGame::k_type_all_zodiac: {//平特单肖
+                return '最高赔率';
+            }
+            default:
+                return '固定赔率';
+        }
+    }
+
+    public function bonusName()
+    {
+        switch ($this->game_id) {
+            case UGame::k_type_all_solo: //平特单码
+            case UGame::k_type_all_zodiac: {//平特单肖
+                return '最高返还';
+            }
+            default:
+                return '固定返还';
+        }
+    }
 }

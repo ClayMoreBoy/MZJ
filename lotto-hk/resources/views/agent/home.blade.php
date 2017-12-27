@@ -64,10 +64,10 @@
             @foreach($statistics as $statistic)
                 <div class="issue">
                     <p>{{ $statistic->issue_id or '' }}期(<span class="{{ $statistic->issue->status == \App\Models\Issue::k_status_done?'done':'unknown' }}">{{ $statistic->issue->status==\App\Models\Issue::k_status_done?'已结束':'未结算' }}</span>)</p>
-                    <p><span class="label">销售:</span><span class="money">￥{{ number_format($statistic->sell_total,2) }}</span></p>
-                    <p><span class="label">返奖:</span><span class="money">￥{{ number_format($statistic->bonus_total,2) }}</span></p>
-                    <p><span class="label">佣金:</span><span class="money">￥{{ number_format($statistic->commission,2) }}</span></p>
-                    <p><span class="label">利润:</span><span class="money">￥{{ number_format($statistic->sell_total-$statistic->bonus_total-$statistic->commission,2) }}</span></p>
+                    <p><span class="label">销售:</span><span class="money">￥{{ number_format($statistic->sell_total,2,'.','') }}</span></p>
+                    <p><span class="label">返奖:</span><span class="money">￥{{ number_format($statistic->bonus_total,2,'.','') }}</span></p>
+                    <p><span class="label">佣金:</span><span class="money">￥{{ number_format($statistic->commission,2,'.','') }}</span></p>
+                    <p><span class="label">利润:</span><span class="money">￥{{ number_format($statistic->sell_total-$statistic->bonus_total-$statistic->commission,2,'.','') }}</span></p>
                 </div>
             @endforeach
         </div>
@@ -92,7 +92,7 @@
         </ul>
         <div class="footer">
             <p>
-                我的域名:<a href="//{{ $domain }}/mobiles/" data-ajax="false" target="_blank">{{ $domain }}</a>
+                我的域名:<a href="//{{ $domain or '' }}/mobiles/" data-ajax="false" target="_blank">{{ $domain or '' }}</a>
             </p>
         </div>
     </div>

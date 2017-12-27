@@ -37,15 +37,7 @@ class UDomainVerify
                 return $next($request);
             } elseif (isset($rs['merchant'])) {
                 View::share('merchant', $rs['merchant']);
-                $domain_old = parse_url($request->fullUrl(), PHP_URL_HOST);
-                $scheme = parse_url($request->fullUrl(), PHP_URL_SCHEME);
-                $path = parse_url($request->fullUrl(), PHP_URL_PATH);
-                $domain = $login->account->merchant->domain . '.' . $rs['domain'];
-                if ($domain_old == $domain) {
-                    return $next($request);
-                } else {
-                    return redirect($scheme . '://' . $domain . $path);
-                }
+                return $next($request);
             } else {
                 $domain_old = parse_url($request->fullUrl(), PHP_URL_HOST);
                 $scheme = parse_url($request->fullUrl(), PHP_URL_SCHEME);

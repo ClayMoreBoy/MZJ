@@ -47,10 +47,10 @@
                         <h3>用户数：<strong>{{ $agent->accounts()->count() }}</strong></h3>
                     </li>
                     <li>
-                        <h3>总销售：<strong>{{ number_format($agent->statistics()->sum('sell_total'),2) }}</strong></h3>
+                        <h3>总销售：<strong>{{ number_format($agent->statistics()->sum('sell_total'),2,'.','') }}</strong></h3>
                     </li>
                     <li>
-                        <h3>总返奖：<strong>{{ number_format($agent->statistics()->sum('bonus_total'),2) }}</strong></h3>
+                        <h3>总返奖：<strong>{{ number_format($agent->statistics()->sum('bonus_total'),2,'.','') }}</strong></h3>
                     </li>
                     <li data-role="list-divider">近5期销售</li>
                     <div class="ui-grid-b">
@@ -70,10 +70,10 @@
                                 <div class="ui-bar ui-bar-a">{{ $item->issue_id }}期</div>
                             </div>
                             <div class="ui-block-b">
-                                <div class="ui-bar ui-bar-a">{{ number_format($item->sell_total,2) }}</div>
+                                <div class="ui-bar ui-bar-a">{{ number_format($item->sell_total,2,'.','') }}</div>
                             </div>
                             <div class="ui-block-c">
-                                <div class="ui-bar ui-bar-a">{{ number_format($item->bonus_total,2) }}</div>
+                                <div class="ui-bar ui-bar-a">{{ number_format($item->bonus_total,2,'.','') }}</div>
                             </div>
                         </div>
                     @endforeach

@@ -48,7 +48,7 @@
             <ul data-role="listview" data-inset="true">
                 <div class="ui-grid-solo">
                     <div class="ui-block-a">
-                        <div class="ui-bar ui-bar-b">第{{ $issue_id }}期,总销售:￥{{ number_format($uass->sum('sell_total'),2) }}</div>
+                        <div class="ui-bar ui-bar-b">第{{ $issue_id }}期,总销售:￥{{ number_format($uass->sum('sell_total'),2,'.','') }}</div>
                     </div>
                 </div>
                 <div class="ui-grid-c">
@@ -71,13 +71,13 @@
                             <div class="ui-bar ui-bar-a">{{ $uas->agent->name }}</div>
                         </div>
                         <div class="ui-block-b">
-                            <div class="ui-bar ui-bar-a">{{ number_format($uas->sell_total,2) }}</div>
+                            <div class="ui-bar ui-bar-a">{{ number_format($uas->sell_total,2,'.','') }}</div>
                         </div>
                         <div class="ui-block-c">
-                            <div class="ui-bar ui-bar-a">{{ number_format($uas->bonus_total,2) }}</div>
+                            <div class="ui-bar ui-bar-a">{{ number_format($uas->bonus_total,2,'.','') }}</div>
                         </div>
                         <div class="ui-block-c">
-                            <div class="ui-bar ui-bar-a">{{ number_format($uas->commission,2) }}</div>
+                            <div class="ui-bar ui-bar-a">{{ number_format($uas->commission,2,'.','') }}</div>
                         </div>
                     </div>
                 @endforeach

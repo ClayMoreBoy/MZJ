@@ -41,7 +41,7 @@ class OrderController extends Controller
                                 $sell->fee = $order->bonus;
                                 $sell->type = UAccountBill::k_type_bonus;
                                 $sell->tid = $order->id;
-                                $sell->describe = '返奖';
+                                $sell->describe = '返奖(' . $order->game->name . ')';
                                 if ($sell->save()) {
                                     DB::commit();
                                 } else {
@@ -62,8 +62,7 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                }
-                elseif ($order->game_id == UGame::k_type_all_solo) {//平特单码
+                } elseif ($order->game_id == UGame::k_type_all_solo) {//平特单码
                     DB::beginTransaction();
                     $nums = [
                         $order->issueO->num1,
@@ -92,7 +91,7 @@ class OrderController extends Controller
                                 $sell->fee = $order->bonus;
                                 $sell->type = UAccountBill::k_type_bonus;
                                 $sell->tid = $order->id;
-                                $sell->describe = '返奖';
+                                $sell->describe = '返奖(' . $order->game->name . ')';
                                 if ($sell->save()) {
                                     DB::commit();
                                 } else {
@@ -113,8 +112,7 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                }
-                elseif ($order->game_id == UGame::k_type_all_zodiac) {//平特单肖
+                } elseif ($order->game_id == UGame::k_type_all_zodiac) {//平特单肖
                     DB::beginTransaction();
                     $nums = [
                         $order->issueO->num1,
@@ -159,7 +157,7 @@ class OrderController extends Controller
                                 $sell->fee = $order->bonus;
                                 $sell->type = UAccountBill::k_type_bonus;
                                 $sell->tid = $order->id;
-                                $sell->describe = '返奖';
+                                $sell->describe = '返奖(' . $order->game->name . ')';
                                 if ($sell->save()) {
                                     DB::commit();
                                 } else {
@@ -180,8 +178,7 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                }
-                elseif (in_array($order->game_id, [UGame::k_type_all_zodiac_two, UGame::k_type_all_zodiac_three, UGame::k_type_all_zodiac_four, UGame::k_type_all_zodiac_five, UGame::k_type_all_zodiac_six])) {
+                } elseif (in_array($order->game_id, [UGame::k_type_all_zodiac_two, UGame::k_type_all_zodiac_three, UGame::k_type_all_zodiac_four, UGame::k_type_all_zodiac_five, UGame::k_type_all_zodiac_six])) {
                     DB::beginTransaction();
                     $nums = [
                         $order->issueO->num1,
@@ -214,7 +211,7 @@ class OrderController extends Controller
                                 $sell->fee = $order->bonus;
                                 $sell->type = UAccountBill::k_type_bonus;
                                 $sell->tid = $order->id;
-                                $sell->describe = '返奖';
+                                $sell->describe = '返奖(' . $order->game->name . ')';
                                 if ($sell->save()) {
                                     DB::commit();
                                 } else {
@@ -235,8 +232,7 @@ class OrderController extends Controller
                             DB::rollBack();
                         }
                     }
-                }
-                elseif (in_array($order->game_id, [UGame::k_type_all_two, UGame::k_type_all_three, UGame::k_type_all_four, UGame::k_type_all_five, UGame::k_type_all_six])) {
+                } elseif (in_array($order->game_id, [UGame::k_type_all_two, UGame::k_type_all_three, UGame::k_type_all_four, UGame::k_type_all_five, UGame::k_type_all_six])) {
                     DB::beginTransaction();
                     $nums = [
                         $order->issueO->num1,
@@ -264,7 +260,7 @@ class OrderController extends Controller
                                 $sell->fee = $order->bonus;
                                 $sell->type = UAccountBill::k_type_bonus;
                                 $sell->tid = $order->id;
-                                $sell->describe = '返奖';
+                                $sell->describe = '返奖(' . $order->game->name . ')';
                                 if ($sell->save()) {
                                     DB::commit();
                                 } else {

@@ -122,11 +122,6 @@
                 赔率<i class="odd">@0.00</i>；返还<i class="odd price">￥0.00</i>。
             </p>
             <div class="basket">
-                {{--<ul>--}}
-                    {{--<li>--}}
-                    {{--<span class="ball green selective">02</span>--}}
-                    {{--</li>--}}
-                {{--</ul>--}}
                 <span class="list"><span class="ball">?</span></span>
             </div>
             <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop"

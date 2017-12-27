@@ -9,9 +9,30 @@
         .win {
             color: #FB223D;
         }
+
         .lose {
             color: #1fc26b;
         }
+
+        .ball {
+            float: left;
+            margin: .2em;
+            line-height: 1.6em;
+            height: 1.6em;
+            width: 1.6em;
+            display: inline-block;
+            text-align: center;
+            border-radius: 50%;
+            background: #c0c0c0;
+            color: #fff;
+            text-shadow: none;
+        }
+
+        .ball.hit {
+            background: #FB223D;
+            color: #fff;
+        }
+
     </style>
 </head>
 <body>
@@ -28,8 +49,24 @@
             <ul data-role="listview" data-inset="true">
                 @foreach($bills as $bill)
                     <li>
-                        <h3>{{ $bill->describe }}<span class="{{ $bill->fee>0?'win':'lose' }}">￥{{ number_format($bill->fee, 2, '.', '') }}</span></h3>
+                        <h3>
+                            {{ $bill->describe }}
+                            <span class="{{ $bill->fee>0?'win':'lose' }}">￥{{ number_format($bill->fee, 2, '.', '') }}</span>
+                        </h3>
                         <p class="ui-li-aside">{{ substr($bill->created_at,0,16) }}</p>
+                        @if($bill->type == \App\Models\UAccountBill::k_type_bonus)
+                            <div class="items">
+                                @foreach(explode('|',$bill->order->items) as $item)
+                                    <span class="ball {{ str_contains($bill->order->hit_item, $item)?'hit':'' }}">{{ $item }}</span>
+                                @endforeach
+                            </div>
+                        @elseif($bill->type == \App\Models\UAccountBill::k_type_buy)
+                            <div class="items">
+                                @foreach(explode('|',$bill->order->items) as $item)
+                                    <span class="ball">{{ $item }}</span>
+                                @endforeach
+                            </div>
+                        @endif
                     </li>
                 @endforeach
             </ul>

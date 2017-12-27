@@ -90,7 +90,7 @@ class GamesController extends BaseController
                     $sell->fee = $order->total_fee * -1;
                     $sell->type = UAccountBill::k_type_buy;
                     $sell->tid = $order->id;
-                    $sell->describe = '消费';
+                    $sell->describe = '消费(' . $game->name . ')';
                     if ($sell->save()) {
                         DB::commit();
                         return response()->json(['code' => 0, 'message' => 'OK']);
@@ -176,7 +176,7 @@ class GamesController extends BaseController
             $order->total_fee = $total_fee;
             $order->items = $ballstr;
             if ($game_id == UGame::k_type_all_solo) {//单
-                $order->bonus = round((($order->odd * $total_fee) / count($balls)) * min(count($balls), 7), 2);
+                $order->bonus = round((($game->odd * $total_fee) / count($balls)) * min(count($balls), 7), 2);
                 $order->odd = round($order->bonus / $order->total_fee, 2);
             } else {
                 $order->odd = $game->odd;
@@ -202,7 +202,7 @@ class GamesController extends BaseController
                     $sell->fee = $order->total_fee * -1;
                     $sell->type = UAccountBill::k_type_buy;
                     $sell->tid = $order->id;
-                    $sell->describe = '消费';
+                    $sell->describe = '消费(' . $game->name . ')';
                     if ($sell->save()) {
                         DB::commit();
                         return response()->json(['code' => 0, 'message' => 'OK']);
@@ -326,7 +326,7 @@ class GamesController extends BaseController
                     $sell->fee = $order->total_fee * -1;
                     $sell->type = UAccountBill::k_type_buy;
                     $sell->tid = $order->id;
-                    $sell->describe = '消费';
+                    $sell->describe = '消费(' . $game->name . ')';
                     if ($sell->save()) {
                         DB::commit();
                         return response()->json(['code' => 0, 'message' => 'OK']);

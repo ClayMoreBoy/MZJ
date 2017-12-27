@@ -42,7 +42,8 @@
         <ul>
             @for($i=0; $i<6;$i++)
                 <li class="tz">
-                    <span class="ball red" data-value="{{ $zodiacs[$i] }}"
+                    <span class="ball red"
+                          data-value="{{ $zodiacs[$i] }}"
                           data-odd="{{ $zodiacs[$i] == $first_zodiac?$game->odd1:$game->odd }}">
                         {{ $zodiacs[$i] }}
                     </span>
@@ -111,7 +112,7 @@
         var itemsMax = parseFloat('{{ $game->items_max }}');
         var itemsMin = parseFloat('{{ $game->items_min }}');
         var game_id = '{{ $game->game_id }}';
-                @if($game->game_id == \App\Models\UGame::k_type_all_solo)
+                @if($game->game_id == \App\Models\UGame::k_type_all_zodiac)
         var is_solo = true;
                 @else
         var is_solo = false;
@@ -163,10 +164,10 @@
                 var prePrice = capital / selected_ball.length;
                 $(selected_ball).each(function (i, data) {
                     var odd = parseFloat($(data).attr('data-odd'));
-                    gameOdd = Math.min(gameOdd, odd);
-                    var value = $(data).attr('data-value');
-                    maxOdd += prePrice * odd;
                     $(data).addClass('selective');
+                    gameOdd = Math.min(gameOdd, odd);
+                    maxOdd += prePrice * odd;
+                    var value = $(data).attr('data-value');
                     html += '<span class="list"><span class="ball red selective" data-value="' + value + '">' + data.innerText + '</span></span>';
                     selectCount++;
                 });

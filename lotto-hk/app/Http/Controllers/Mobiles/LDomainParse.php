@@ -8,7 +8,6 @@
 
 namespace App\Http\Controllers\Mobiles;
 
-
 use App\Models\UMerchantAccount;
 use Illuminate\Http\Request;
 

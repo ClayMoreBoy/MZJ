@@ -94,6 +94,7 @@ class OrderController extends Controller
         $orders = $login->account->orders()->where('issue', $issue->id)->where('status', '>=', UOrder::k_hit_unknown)->get();
         $games = [];
         foreach ($orders as $order) {
+            if (in_array($order->game_id,[]))
             if (!isset($games[$order->game_id])) {
                 if (isset($order->game)) {
                     $games[$order->game_id]['game'] = $order->game;

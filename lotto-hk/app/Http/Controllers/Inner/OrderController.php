@@ -129,7 +129,7 @@ class OrderController extends Controller
                         $zodiacs[] = $this->getNumberAttr($year, $num)['zodiac'];
                     }
                     $items = explode('|', $order->items);
-                    $hit_items = array_intersect($zodiacs, $items);
+                    $hit_items = array_intersect($items, $zodiacs);
                     //命中
                     if (!empty($hit_items)) {
                         $order->status = UOrder::k_status_done;
@@ -195,7 +195,7 @@ class OrderController extends Controller
                         $zodiacs[] = $this->getNumberAttr($year, $num)['zodiac'];
                     }
                     $items = explode('|', $order->items);
-                    $hit_items = array_intersect($zodiacs, $items);
+                    $hit_items = array_intersect($items, $zodiacs);
                     //命中
                     if (count($hit_items) == count($items)) {
                         $order->status = UOrder::k_status_done;

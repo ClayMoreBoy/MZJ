@@ -39,14 +39,16 @@ class UDomainVerify
                 View::share('merchant', $rs['merchant']);
                 return $next($request);
             } else {
-                $domain_old = parse_url($request->fullUrl(), PHP_URL_HOST);
-                $scheme = parse_url($request->fullUrl(), PHP_URL_SCHEME);
-                if ($domain_old == $rs['domain']) {
-                    return $next($request);
-                } else {
-                    return redirect($scheme . '://' . $rs['domain'] . '/mobiles/');
-                }
+//                $domain_old = parse_url($request->fullUrl(), PHP_URL_HOST);
+//                $scheme = parse_url($request->fullUrl(), PHP_URL_SCHEME);
+//                if ($domain_old == $rs['domain']) {
+//                    return $next($request);
+//                } else {
+//                    $domain = env('APP_DOMAIN', $rs['domain']);
+//                    return redirect($scheme . '://' . $domain . '/mobiles/');
+//                }
             }
+            return $next($request);
         }
     }
 

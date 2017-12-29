@@ -139,6 +139,7 @@
 
 @section('js')
     <script>
+        var numAttr = {!! json_encode($num_attr,JSON_UNESCAPED_UNICODE) !!}
         $(function () {
             var H = 0;
             var M = 0;
@@ -153,8 +154,12 @@
                         ks = k.split(',');
                         issue = parseInt($('.first .issue').html()) % 1000;
                         if (issue == parseInt(ks[0])) {
-                            $('.first .ball').each(function (i, d) {
-                                $(d).html(ks[i + 1]);
+                            $('.first .ball').each(function (i, ball) {
+                                $(ball).addClass(numAttr[ks[i + 1]].color);
+                                $(ball).html(ks[i + 1]);
+                            });
+                            $('.first .zodiacs').each(function (i, ball) {
+                                $(ball).html(numAttr[ks[i + 1]].zodiacs);
                             });
                         }
                     });

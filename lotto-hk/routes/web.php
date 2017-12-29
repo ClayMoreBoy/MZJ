@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return redirect('/mobiles/');
+    return view('mobiles.home');
 });
 
 Route::group(["namespace" => "Mobiles"], function () {

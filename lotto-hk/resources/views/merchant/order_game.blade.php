@@ -88,6 +88,7 @@
                         <div class="ui-bar ui-bar-a">盈亏</div>
                     </div>
                 </div>
+                @if(isset($game['items']))
                 @foreach(collect($game['items'])->sortByDesc('fee') as $values)
                     <div class="ui-grid-c">
                         <div class="ui-block-a">
@@ -104,6 +105,7 @@
                         </div>
                     </div>
                 @endforeach
+                @endif
             </div>
         </div>
     </div>

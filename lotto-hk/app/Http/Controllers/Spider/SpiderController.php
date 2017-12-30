@@ -2341,7 +2341,7 @@ EOD;
     public function live(Request $request)
     {
 //        $url = 'http://45.61.249.183/chajian/bmjg.js?_=' . time();
-        $url = 'http://www.8988kj.com/chajian/bmjg.js?_='.time();
+        $url = 'http://www.8988kj.com/chajian/bmjg.js?_=' . time();
 //        $url = 'http://bbmm.66kj.com/js/bmjg.js?_=' . time();
 //        $url = 'https://www.ef95.com/js/i1i1i1i1i1l1l1l1l0.js?_=' . time();
         $str = $this->capture($url);
@@ -2389,15 +2389,20 @@ EOD;
         }
         $issue->save();
 
-        $next_id = substr(date('Y'), 2, 2) . $strss[8];
+        if ($strss[8] > $strss[0]) {
+            $next_id = date('Y') % 100 . $strss[8];
+            $date = date_create_from_format('Y-m-d H点i分', date('Y') . '-' . $strss[9] . '-' . $strss[10] . ' ' . $strss[12]);
+        } else {
+            $next_id = (date('Y') + 1) % 100 . $strss[8];
+            $date = date_create_from_format('Y-m-d H点i分', (date('Y') + 1) . '-' . $strss[9] . '-' . $strss[10] . ' ' . $strss[12]);
+        }
         $issue_next = Issue::query()->find($next_id);
         if (!isset($issue_next)) {
             $issue_next = new Issue();
             $issue_next->id = $next_id;
             $issue_next->status = 0;
         }
-
-        $issue_next->date = date_create_from_format('Y-m-d H点i分', date('Y') . '-' . $strss[9] . '-' . $strss[10] . ' ' . $strss[12]);
+        $issue_next->date = $date;
         $issue_next->save();
     }
 
@@ -2543,10 +2548,10 @@ EOD;
         $url = 'http://1680660.com/news/findNewsParticularById.do?id=';
         $articles = Article::query()
 //            ->whereNull('content')
-            ->orderBy('released_at','desc')
+            ->orderBy('released_at', 'desc')
             ->take(10)
             ->get();
-        foreach ($articles as $article){
+        foreach ($articles as $article) {
             $str = $this->capture($url . $article->id);
             $result = json_decode($str);
             if (is_object($result)) {

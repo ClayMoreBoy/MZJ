@@ -148,18 +148,24 @@
                 M = d.M;
             });
             setInterval(function () {
-                if (H >= 20 && H < 22 && M >= 0) {
+                if (H >= 20 && H < 22 && M >= 20) {
                     $.getJSON('/json/{{ request('k','k1') }}.json?t=' + (new Date().getTime()), function (d) {
                         k = d.k;
                         ks = k.split(',');
                         issue = parseInt($('.first .issue').html()) % 1000;
                         if (issue == parseInt(ks[0])) {
                             $('.first .ball').each(function (i, ball) {
-                                $(ball).addClass(numAttr[ks[i + 1]].color);
-                                $(ball).html(ks[i + 1]);
+                                var num = ks[i + 1];
+                                $(ball).html(num);
+                                if (!isNaN(parseInt(num))){
+                                    $(ball).addClass(numAttr[parseInt(num)].color);
+                                }
                             });
                             $('.first .zodiacs').each(function (i, ball) {
-                                $(ball).html(numAttr[ks[i + 1]].zodiacs);
+                                var num = ks[i + 1];
+                                if (!isNaN(parseInt(num))){
+                                    $(ball).html(numAttr[parseInt(num)].zodiacs);
+                                }
                             });
                         }
                     });

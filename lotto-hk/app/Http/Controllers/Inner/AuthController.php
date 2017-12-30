@@ -53,6 +53,7 @@ class AuthController extends Controller
                     $umg->path = $game->path;
                     $umg->items_min = $game->items_min;
                     $umg->items_max = $game->items_max;
+                    $umg->sort = $game->sort;
                     if (!$umg->save()) {
                         DB::rollBack();
                         return response()->json(["code" => 401, "msg" => "服务器异常！"]);
@@ -85,6 +86,7 @@ class AuthController extends Controller
                         $umg->path = $game->path;
                         $umg->items_min = $game->items_min;
                         $umg->items_max = $game->items_max;
+                        $umg->sort = $game->sort;
                         $umg->save();
                     } else {
                         $umg = new UMerchantGame();
@@ -97,6 +99,7 @@ class AuthController extends Controller
                         $umg->path = $game->path;
                         $umg->items_min = $game->items_min;
                         $umg->items_max = $game->items_max;
+                        $umg->sort = $game->sort;
                         $umg->save();
                     }
                 }
